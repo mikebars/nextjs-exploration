@@ -29,7 +29,7 @@ yarn lint
   * Testing
   */
 /** jest --coverage */
-yarn jest
+yarn test
 ```
 
 ## Overview
