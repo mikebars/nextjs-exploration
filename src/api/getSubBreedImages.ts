@@ -1,31 +1,43 @@
 import * as fp from 'fp-ts'
 import * as io from 'io-ts'
 
-import {
-  decodeApiCall,
-  generateApiCall,
-  RefineApiCallEitherValue,
-  RefineApiCallValue,
-} from 'src/lib/api'
+import { ApiEnvironment, decodeApiCall, generateApiCall } from 'src/lib/api'
 
 export type SubBreedImagesSuccess = {
   message: Array<string>
   status: 'success'
 }
 
-const SubBreedImagesSuccessCodec: io.Type<SubBreedImagesSuccess> = io.type({
-  message: io.array(io.string),
-  status: io.literal('success'),
-})
+export const SubBreedImagesSuccessCodec: io.Type<SubBreedImagesSuccess> = io.type(
+  {
+    message: io.array(io.string),
+    status: io.literal('success'),
+  },
+)
 
-export type SubBreedImages = RefineApiCallEitherValue<SubBreedImagesSuccess>
+export type SubBreedImages = fp.either.Either<
+  Array<Error>,
+  SubBreedImagesSuccess
+>
 
-export type GetSubBreedImages = RefineApiCallValue<SubBreedImagesSuccess>
+export type GetSubBreedImages = fp.readerTaskEither.ReaderTaskEither<
+  ApiEnvironment,
+  Array<Error>,
+  SubBreedImagesSuccess
+>
 
-export const generateGetSubBreedImages: (params: {
+export type GenerateGetSubBreedImagesParams = {
   breed: string
   subBreed: string
-}) => RefineApiCallValue<SubBreedImagesSuccess> = (params) =>
+}
+
+export type GenerateGetSubBreedImages = (
+  params: GenerateGetSubBreedImagesParams,
+) => GetSubBreedImages
+
+export const generateGetSubBreedImages: GenerateGetSubBreedImages = (
+  params: GenerateGetSubBreedImagesParams,
+): GetSubBreedImages =>
   fp.pipeable.pipe(
     generateApiCall(
       ` https://dog.ceo/api/breed/${params.breed}/${params.subBreed}/images`,

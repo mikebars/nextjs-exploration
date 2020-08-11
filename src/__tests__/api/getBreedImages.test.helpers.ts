@@ -1,5 +1,5 @@
 /* tslint:disable:max-file-line-count */
-import { BreedImagesSuccess } from 'src/api/getBreedImages'
+import type { BreedImagesSuccess } from 'src/api/getBreedImages'
 
 export const defaultBreedImagesSuccess: BreedImagesSuccess = {
   message: [

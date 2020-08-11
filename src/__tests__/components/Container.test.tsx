@@ -1,13 +1,13 @@
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import React from 'react'
 
 import { Container } from 'src/components/Container'
 
-describe('container', () => {
-  it('container snapshot test', () => {
+describe('container', (): void => {
+  it('container snapshot test', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(<Container />)
+    const renderResult: RenderResult = render(<Container />)
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>

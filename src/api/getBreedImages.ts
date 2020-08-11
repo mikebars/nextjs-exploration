@@ -1,30 +1,37 @@
 import * as fp from 'fp-ts'
 import * as io from 'io-ts'
 
-import {
-  decodeApiCall,
-  generateApiCall,
-  RefineApiCallEitherValue,
-  RefineApiCallValue,
-} from 'src/lib/api'
+import { ApiEnvironment, decodeApiCall, generateApiCall } from 'src/lib/api'
 
 export type BreedImagesSuccess = {
   message: Array<string>
   status: 'success'
 }
 
-const BreedImagesSuccessCodec: io.Type<BreedImagesSuccess> = io.type({
+export const BreedImagesSuccessCodec: io.Type<BreedImagesSuccess> = io.type({
   message: io.array(io.string),
   status: io.literal('success'),
 })
 
-export type BreedImages = RefineApiCallEitherValue<BreedImagesSuccess>
+export type BreedImages = fp.either.Either<Array<Error>, BreedImagesSuccess>
 
-export type GetBreedImages = RefineApiCallValue<BreedImagesSuccess>
+export type GetBreedImages = fp.readerTaskEither.ReaderTaskEither<
+  ApiEnvironment,
+  Array<Error>,
+  BreedImagesSuccess
+>
 
-export const generateGetBreedImages: (params: {
+export type GenerateGetBreedImagesParams = {
   breed: string
-}) => GetBreedImages = (params) =>
+}
+
+export type GenerateGetBreedImages = (
+  params: GenerateGetBreedImagesParams,
+) => GetBreedImages
+
+export const generateGetBreedImages: GenerateGetBreedImages = (
+  params: GenerateGetBreedImagesParams,
+): GetBreedImages =>
   fp.pipeable.pipe(
     generateApiCall(`https://dog.ceo/api/breed/${params.breed}/images`),
     decodeApiCall(BreedImagesSuccessCodec),

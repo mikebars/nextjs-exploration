@@ -1,36 +1,46 @@
 import * as fp from 'fp-ts'
 import unfetch from 'isomorphic-unfetch'
-import type { GetStaticProps, NextPage } from 'next'
+import * as Next from 'next'
 import Head from 'next/head'
-import React, { Fragment } from 'react'
+import React, { Fragment, ReactElement } from 'react'
 
-import { AllBreeds, getAllBreeds } from 'src/api/getAllBreeds'
+import { AllBreeds, AllBreedsSuccess, getAllBreeds } from 'src/api/getAllBreeds'
 import { Container } from 'src/components/Container'
 import { Errors } from 'src/components/Errors'
 import { Header } from 'src/components/Header'
 import { Link } from 'src/components/Link'
-import { ApiEnvironment } from 'src/lib/api'
+import type { ApiEnvironment } from 'src/lib/api'
 
-type Props = {
+export type Props = {
   allBreeds: AllBreeds
 }
 
-const Breeds: NextPage<Props> = (props) => {
-  const sortedBreeds = fp.pipeable.pipe(
-    props.allBreeds,
-    fp.either.map(({ message }) =>
-      fp.pipeable.pipe(
-        message,
-        fp.record.toArray,
-        fp.array.sort(
-          fp.ord.getTupleOrd(
-            fp.ord.ordString,
-            fp.array.getOrd(fp.ord.ordString),
+export type SortedBreedsSuccess = Array<[string, Array<string>]>
+
+export type SortedBreeds = fp.either.Either<Array<Error>, SortedBreedsSuccess>
+
+export type SortBreeds = (allBreeds: AllBreeds) => SortedBreeds
+
+export const sortBreeds: SortBreeds = (allBreeds: AllBreeds): SortedBreeds =>
+  fp.pipeable.pipe(
+    allBreeds,
+    fp.either.map(
+      ({ message }: AllBreedsSuccess): SortedBreedsSuccess =>
+        fp.pipeable.pipe(
+          message,
+          fp.record.toArray,
+          fp.array.sort(
+            fp.ord.getTupleOrd(
+              fp.ord.ordString,
+              fp.array.getOrd(fp.ord.ordString),
+            ),
           ),
         ),
-      ),
     ),
   )
+
+export const Breeds: Next.NextPage<Props> = (props: Props): ReactElement => {
+  const sortedBreeds: SortedBreeds = sortBreeds(props.allBreeds)
 
   return (
     <>
@@ -45,25 +55,34 @@ const Breeds: NextPage<Props> = (props) => {
           {fp.pipeable.pipe(
             sortedBreeds,
             fp.either.fold(
-              (errors) => <Errors errors={errors} />,
-              (breeds) => (
+              (errors: Array<Error>): ReactElement => (
+                <Errors errors={errors} />
+              ),
+              (breeds: SortedBreedsSuccess): ReactElement => (
                 <>
-                  {breeds.map(([breed, subBreeds]) => (
-                    <Fragment key={breed}>
-                      <Link as={`/breeds/${breed}`} href="/breeds/[breed]">
-                        {breed}
-                      </Link>
-                      {subBreeds.map((subBreed) => (
-                        <Link
-                          as={`/breeds/${breed}/${subBreed}`}
-                          href="/breeds/[breed]/[subBreed]"
-                          key={`${breed} (${subBreed})`}
-                        >
-                          {`${breed} (${subBreed})`}
+                  {breeds.map(
+                    ([
+                      breed,
+                      subBreeds,
+                    ]: SortedBreedsSuccess[number]): ReactElement => (
+                      <Fragment key={breed}>
+                        <Link as={`/breeds/${breed}`} href="/breeds/[breed]">
+                          {breed}
                         </Link>
-                      ))}
-                    </Fragment>
-                  ))}
+                        {subBreeds.map(
+                          (subBreed: string): ReactElement => (
+                            <Link
+                              as={`/breeds/${breed}/${subBreed}`}
+                              href="/breeds/[breed]/[subBreed]"
+                              key={`${breed} (${subBreed})`}
+                            >
+                              {`${breed} (${subBreed})`}
+                            </Link>
+                          ),
+                        )}
+                      </Fragment>
+                    ),
+                  )}
                 </>
               ),
             ),
@@ -74,18 +93,28 @@ const Breeds: NextPage<Props> = (props) => {
   )
 }
 
-export const generateGetStaticProps: fp.reader.Reader<
-  ApiEnvironment,
-  GetStaticProps<Props>
-> = (r) => async (_rawContext) => {
-  const allBreeds = await getAllBreeds(r)()
+export type RawContext = Next.GetStaticPropsContext
 
-  const props = { allBreeds }
+export type StaticProps = Next.GetStaticPropsResult<Props>
+
+export type GetStaticProps = Next.GetStaticProps<Props>
+
+export type GenerateGetStaticProps = fp.reader.Reader<
+  ApiEnvironment,
+  GetStaticProps
+>
+
+export const generateGetStaticProps: GenerateGetStaticProps = (
+  r: ApiEnvironment,
+): GetStaticProps => async (_rawContext: RawContext): Promise<StaticProps> => {
+  const allBreeds: AllBreeds = await getAllBreeds(r)()
+
+  const props: Props = { allBreeds }
 
   return { props }
 }
 
-export const getStaticProps: GetStaticProps<Props> = generateGetStaticProps({
+export const getStaticProps: GetStaticProps = generateGetStaticProps({
   fetch: unfetch,
 })
 

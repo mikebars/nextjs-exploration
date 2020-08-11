@@ -1,13 +1,13 @@
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import React from 'react'
 
 import { Header } from 'src/components/Header'
 
-describe('header', () => {
-  it('header snapshot test', () => {
+describe('header', (): void => {
+  it('header snapshot test', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(<Header />)
+    const renderResult: RenderResult = render(<Header />)
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>

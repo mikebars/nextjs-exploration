@@ -2,18 +2,21 @@ import * as fc from 'fast-check'
 
 import { concatClassName } from 'src/lib/react'
 
-describe('concatClassName', () => {
-  it('concatClassName output is defaultClassName when className is undefined', () => {
+describe('concatClassName', (): void => {
+  it('concatClassName output is defaultClassName when className is undefined', (): void => {
     expect.hasAssertions()
 
     fc.assert(
       fc.property(
         fc.constant(undefined),
         fc.string(),
-        (className, defaultClassName) => {
-          const concatenated = concatClassName(className, defaultClassName)
+        (className: undefined, defaultClassName: string): boolean => {
+          const concatenated: string = concatClassName(
+            className,
+            defaultClassName,
+          )
 
-          const isDefaultClassName = concatenated === defaultClassName
+          const isDefaultClassName: boolean = concatenated === defaultClassName
 
           expect(isDefaultClassName).toBe(true)
 
@@ -23,19 +26,28 @@ describe('concatClassName', () => {
     )
   })
 
-  it('concatClassName output always includes defaultClassName', () => {
+  it('concatClassName output always includes defaultClassName', (): void => {
     expect.hasAssertions()
 
     fc.assert(
-      fc.property(fc.string(), fc.string(), (className, defaultClassName) => {
-        const concatenated = concatClassName(className, defaultClassName)
+      fc.property(
+        fc.string(),
+        fc.string(),
+        (className: string, defaultClassName: string): boolean => {
+          const concatenated: string = concatClassName(
+            className,
+            defaultClassName,
+          )
 
-        const includesDefaultClassName = concatenated.includes(defaultClassName)
+          const includesDefaultClassName: boolean = concatenated.includes(
+            defaultClassName,
+          )
 
-        expect(includesDefaultClassName).toBe(true)
+          expect(includesDefaultClassName).toBe(true)
 
-        return includesDefaultClassName
-      }),
+          return includesDefaultClassName
+        },
+      ),
     )
   })
 })

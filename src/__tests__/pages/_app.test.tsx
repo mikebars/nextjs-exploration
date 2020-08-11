@@ -1,17 +1,20 @@
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
+import type { ExcludeRouterProps } from 'next/dist/client/with-router'
 import { withRouter } from 'next/router'
-import React from 'react'
+import React, { ComponentType, ReactElement } from 'react'
 
-import App from 'src/pages/_app'
+import { App, Props as AppProps } from 'src/pages/_app'
 
-describe('app', () => {
-  it('app snapshot test', () => {
+describe('app', (): void => {
+  it('app snapshot test', (): void => {
     expect.hasAssertions()
 
-    const AppWithRouter = withRouter(App)
+    const AppWithRouter: ComponentType<ExcludeRouterProps<
+      AppProps
+    >> = withRouter(App)
 
-    const renderResult = render(
-      <AppWithRouter Component={() => <></>} pageProps={{}} />,
+    const renderResult: RenderResult = render(
+      <AppWithRouter Component={(): ReactElement => <></>} pageProps={{}} />,
     )
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(

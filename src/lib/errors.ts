@@ -1,4 +1,10 @@
-export type Errors = Array<Error>
+export type ErrorsMap = <E extends Array<Error>>(u: Array<unknown>) => E
 
-export const errorsOf: (u: unknown) => Errors = (u) =>
-  Array.of(Error(String(u)))
+export const errorsMap: ErrorsMap = <E extends Array<Error>>(
+  u: Array<unknown>,
+): E => u.flatMap(errorsOf) as E
+
+export type ErrorsOf = <E extends Array<Error>>(u: unknown) => E
+
+export const errorsOf: ErrorsOf = <E extends Array<Error>>(u: unknown): E =>
+  Array.of(Error(String(u))) as E

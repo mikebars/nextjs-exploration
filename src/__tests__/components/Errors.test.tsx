@@ -1,13 +1,13 @@
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import React from 'react'
 
 import { Errors } from 'src/components/Errors'
 
-describe('errors', () => {
-  it('errors snapshot test', () => {
+describe('errors', (): void => {
+  it('errors snapshot test', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(<Errors errors={[Error('')]} />)
+    const renderResult: RenderResult = render(<Errors errors={[Error('')]} />)
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>

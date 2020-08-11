@@ -1,7 +1,12 @@
 import * as fc from 'fast-check'
 import * as fp from 'fp-ts'
 
-import { generateGetBreedImages } from 'src/api/getBreedImages'
+import {
+  BreedImages,
+  generateGetBreedImages,
+  GenerateGetBreedImagesParams,
+} from 'src/api/getBreedImages'
+import type { ApiEnvironment } from 'src/lib/api'
 import { defaultBreedImagesSuccess } from 'src/__tests__/api/getBreedImages.test.helpers'
 import {
   environmentArbitrary,
@@ -9,20 +14,28 @@ import {
   fetchReturnSuccess,
 } from 'src/__tests__/lib/api.test.helpers'
 
-describe('generateGetBreedImages', () => {
-  it('generateGetBreedImages should produce valid output for valid input', async () => {
+describe('generateGetBreedImages', (): void => {
+  it('generateGetBreedImages should produce valid output for valid input', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string() }),
-        environmentArbitrary(() =>
-          fetchReturnSuccess(defaultBreedImagesSuccess),
+        environmentArbitrary(
+          (): Promise<Response> =>
+            fetchReturnSuccess(defaultBreedImagesSuccess),
         ),
-        async (params, r) => {
-          const response = await generateGetBreedImages(params)(r)()
+        async (
+          params: GenerateGetBreedImagesParams,
+          r: ApiEnvironment,
+        ): Promise<boolean> => {
+          const response: BreedImages = await generateGetBreedImages(params)(
+            r,
+          )()
 
-          const isValid = fp.either.isRight(response)
+          const isValid: boolean = fp.either.isRight(response)
 
           expect(isValid).toBe(true)
 
@@ -32,17 +45,26 @@ describe('generateGetBreedImages', () => {
     )
   })
 
-  it('generateGetBreedImages should produce invalid output for invalid input', async () => {
+  it('generateGetBreedImages should produce invalid output for invalid input', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string() }),
-        environmentArbitrary(() => fetchReturnFailure('failure')),
-        async (params, r) => {
-          const response = await generateGetBreedImages(params)(r)()
+        environmentArbitrary(
+          (): Promise<Response> => fetchReturnFailure('failure'),
+        ),
+        async (
+          params: GenerateGetBreedImagesParams,
+          r: ApiEnvironment,
+        ): Promise<boolean> => {
+          const response: BreedImages = await generateGetBreedImages(params)(
+            r,
+          )()
 
-          const isInvalid = fp.either.isLeft(response)
+          const isInvalid: boolean = fp.either.isLeft(response)
 
           expect(isInvalid).toBe(true)
 

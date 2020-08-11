@@ -1,10 +1,16 @@
 /* tslint:disable:max-file-line-count */
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import * as fc from 'fast-check'
 import * as fp from 'fp-ts'
 import React from 'react'
 
-import Breeds, { generateGetStaticProps } from 'src/pages/breeds/index'
+import type { ApiEnvironment } from 'src/lib/api'
+import {
+  Breeds,
+  generateGetStaticProps,
+  RawContext,
+  StaticProps,
+} from 'src/pages/breeds/index'
 import { defaultAllBreedsSuccess } from 'src/__tests__/api/getAllBreeds.test.helpers'
 import {
   environmentArbitrary,
@@ -13,11 +19,13 @@ import {
 } from 'src/__tests__/lib/api.test.helpers'
 import { getStaticPropsContextArbitrary } from 'src/__tests__/lib/next.test.helpers'
 
-describe('breeds', () => {
-  it('breeds snapshot test Left', () => {
+describe('breeds', (): void => {
+  it('breeds snapshot test Left', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(<Breeds allBreeds={fp.either.left([])} />)
+    const renderResult: RenderResult = render(
+      <Breeds allBreeds={fp.either.left([])} />,
+    )
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>
@@ -50,10 +58,10 @@ describe('breeds', () => {
     `)
   })
 
-  it('breeds snapshot test Right', () => {
+  it('breeds snapshot test Right', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(
+    const renderResult: RenderResult = render(
       <Breeds allBreeds={fp.either.right(defaultAllBreedsSuccess)} />,
     )
 
@@ -1102,17 +1110,25 @@ describe('breeds', () => {
     `)
   })
 
-  it('breeds generateGetStaticProps decodes valid data as Right', async () => {
+  it('breeds generateGetStaticProps decodes valid data as Right', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(() => fetchReturnSuccess(defaultAllBreedsSuccess)),
+        environmentArbitrary(
+          (): Promise<Response> => fetchReturnSuccess(defaultAllBreedsSuccess),
+        ),
         getStaticPropsContextArbitrary(),
-        async (r, context) => {
-          const staticProps = await generateGetStaticProps(r)(context)
+        async (r: ApiEnvironment, context: RawContext): Promise<boolean> => {
+          const staticProps: StaticProps = await generateGetStaticProps(r)(
+            context,
+          )
 
-          const isValid = fp.either.isRight(staticProps.props.allBreeds)
+          const isValid: boolean = fp.either.isRight(
+            staticProps.props.allBreeds,
+          )
 
           expect(isValid).toBe(true)
 
@@ -1122,17 +1138,25 @@ describe('breeds', () => {
     )
   })
 
-  it('breeds generateGetStaticProps decodes valid data as Left', async () => {
+  it('breeds generateGetStaticProps decodes invalid data as Left', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(() => fetchReturnFailure('failure')),
+        environmentArbitrary(
+          (): Promise<Response> => fetchReturnFailure('failure'),
+        ),
         getStaticPropsContextArbitrary(),
-        async (r, context) => {
-          const staticProps = await generateGetStaticProps(r)(context)
+        async (r: ApiEnvironment, context: RawContext): Promise<boolean> => {
+          const staticProps: StaticProps = await generateGetStaticProps(r)(
+            context,
+          )
 
-          const isInvalid = fp.either.isLeft(staticProps.props.allBreeds)
+          const isInvalid: boolean = fp.either.isLeft(
+            staticProps.props.allBreeds,
+          )
 
           expect(isInvalid).toBe(true)
 

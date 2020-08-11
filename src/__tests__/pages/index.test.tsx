@@ -1,13 +1,13 @@
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import React from 'react'
 
-import Index from 'src/pages/index'
+import { Index } from 'src/pages/index'
 
-describe('index', () => {
-  it('index snapshot test', () => {
+describe('index', (): void => {
+  it('index snapshot test', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(<Index />)
+    const renderResult: RenderResult = render(<Index />)
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>

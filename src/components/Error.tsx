@@ -1,9 +1,15 @@
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 
-type Props = {
+import { ClassNameProps, concatClassName } from 'src/lib/react'
+
+export type Props = ClassNameProps & {
   error: Error
 }
 
-export const Error: FC<Props> = (props) => {
-  return <div className="break-words w-3/4">{props.error.message}</div>
+export const Error: FC<Props> = (props: Props): ReactElement => {
+  return (
+    <div className={concatClassName(props.className, 'break-words w-3/4')}>
+      {props.error.message}
+    </div>
+  )
 }

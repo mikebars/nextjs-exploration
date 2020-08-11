@@ -1,14 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, PropsWithChildren, ReactElement } from 'react'
 
 import { ClassNameProps, concatClassName } from 'src/lib/react'
 
-type Props = ClassNameProps
+export type Props = PropsWithChildren<ClassNameProps>
 
-export const Header: FC<Props> = (props) => {
-  const defaultClassName = 'text-2xl'
-
+export const Header: FC<Props> = (props: Props): ReactElement => {
   return (
-    <div className={concatClassName(props.className, defaultClassName)}>
+    <div className={concatClassName(props.className, 'text-2xl')}>
       {props.children}
     </div>
   )

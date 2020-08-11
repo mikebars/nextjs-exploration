@@ -1,4 +1,4 @@
 {
   "jest.pathToJest": "node_modules\\jest\\bin\\jest.js",
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

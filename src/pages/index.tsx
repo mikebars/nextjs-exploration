@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import React from 'react'
+import React, { ReactElement } from 'react'
 
 import { Container } from 'src/components/Container'
 import { Header } from 'src/components/Header'
 import { Link } from 'src/components/Link'
 
-const Index: NextPage = () => {
+export const Index: NextPage = (): ReactElement => {
   return (
     <>
       <Head>

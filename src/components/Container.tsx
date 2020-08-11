@@ -1,15 +1,17 @@
-import React, { FC } from 'react'
+import React, { FC, PropsWithChildren, ReactElement } from 'react'
 
 import { ClassNameProps, concatClassName } from 'src/lib/react'
 
-type Props = ClassNameProps
+export type Props = PropsWithChildren<ClassNameProps>
 
-export const Container: FC<Props> = (props) => {
-  const defaultClassName =
-    'flex flex-col items-center justify-center max-w-full'
-
+export const Container: FC<Props> = (props: Props): ReactElement => {
   return (
-    <div className={concatClassName(props.className, defaultClassName)}>
+    <div
+      className={concatClassName(
+        props.className,
+        'flex flex-col items-center justify-center max-w-full',
+      )}
+    >
       {props.children}
     </div>
   )

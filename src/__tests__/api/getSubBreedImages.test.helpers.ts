@@ -1,4 +1,4 @@
-import { SubBreedImagesSuccess } from 'src/api/getSubBreedImages'
+import type { SubBreedImagesSuccess } from 'src/api/getSubBreedImages'
 
 export const defaultSubBreedImagesSuccess: SubBreedImagesSuccess = {
   message: [

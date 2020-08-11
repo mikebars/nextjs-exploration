@@ -1,12 +1,19 @@
 /* tslint:disable:max-file-line-count */
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import * as fc from 'fast-check'
 import * as fp from 'fp-ts'
 import React from 'react'
 
-import SubBreed, {
+import type { ApiEnvironment } from 'src/lib/api'
+import {
+  DecodedContext,
   generateGetStaticPaths,
   generateGetStaticProps,
+  Query,
+  RawContext,
+  StaticPaths,
+  StaticProps,
+  SubBreed,
 } from 'src/pages/breeds/[breed]/[subBreed]'
 import { defaultAllBreedsSuccess } from 'src/__tests__/api/getAllBreeds.test.helpers'
 import { defaultSubBreedImagesSuccess } from 'src/__tests__/api/getSubBreedImages.test.helpers'
@@ -17,11 +24,11 @@ import {
 } from 'src/__tests__/lib/api.test.helpers'
 import { getStaticPropsContextArbitrary } from 'src/__tests__/lib/next.test.helpers'
 
-describe('subBreed', () => {
-  it('subBreed snapshot test Left', () => {
+describe('subBreed', (): void => {
+  it('subBreed snapshot test Left', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(
+    const renderResult: RenderResult = render(
       <SubBreed
         context={fp.either.left([])}
         subBreedImages={fp.either.left([])}
@@ -66,10 +73,10 @@ describe('subBreed', () => {
     `)
   })
 
-  it('subBreed snapshot test Right', () => {
+  it('subBreed snapshot test Right', (): void => {
     expect.hasAssertions()
 
-    const renderResult = render(
+    const renderResult: RenderResult = render(
       <SubBreed
         context={fp.either.right({ params: { breed: '', subBreed: '' } })}
         subBreedImages={fp.either.right(defaultSubBreedImagesSuccess)}
@@ -1529,16 +1536,20 @@ describe('subBreed', () => {
     `)
   })
 
-  it('subBreed generateGetStaticPaths decodes valid data as Right', async () => {
+  it('subBreed generateGetStaticPaths decodes valid data as Right', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(() => fetchReturnSuccess(defaultAllBreedsSuccess)),
-        async (r) => {
-          const staticPaths = await generateGetStaticPaths(r)()
+        environmentArbitrary(
+          (): Promise<Response> => fetchReturnSuccess(defaultAllBreedsSuccess),
+        ),
+        async (r: ApiEnvironment): Promise<boolean> => {
+          const staticPaths: StaticPaths = await generateGetStaticPaths(r)()
 
-          const isValid = fp.array.isNonEmpty(staticPaths.paths)
+          const isValid: boolean = fp.array.isNonEmpty(staticPaths.paths)
 
           expect(isValid).toBe(true)
 
@@ -1548,16 +1559,20 @@ describe('subBreed', () => {
     )
   })
 
-  it('subBreed generateGetStaticPaths decodes valid data as Left', async () => {
+  it('subBreed generateGetStaticPaths decodes invalid data as Left', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(() => fetchReturnFailure('failure')),
-        async (r) => {
-          const staticPaths = await generateGetStaticPaths(r)()
+        environmentArbitrary(
+          (): Promise<Response> => fetchReturnFailure('failure'),
+        ),
+        async (r: ApiEnvironment): Promise<boolean> => {
+          const staticPaths: StaticPaths = await generateGetStaticPaths(r)()
 
-          const isInvalid = fp.array.isEmpty(staticPaths.paths)
+          const isInvalid: boolean = fp.array.isEmpty(staticPaths.paths)
 
           expect(isInvalid).toBe(true)
 
@@ -1567,21 +1582,31 @@ describe('subBreed', () => {
     )
   })
 
-  it('subBreed generateGetStaticProps decodes valid data as Right', async () => {
+  it('subBreed generateGetStaticProps decodes valid data as Right', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(() =>
-          fetchReturnSuccess(defaultSubBreedImagesSuccess),
+        environmentArbitrary(
+          (): Promise<Response> =>
+            fetchReturnSuccess(defaultSubBreedImagesSuccess),
         ),
         getStaticPropsContextArbitrary(
           fc.record({ breed: fc.string(), subBreed: fc.string() }),
         ),
-        async (r, context) => {
-          const staticProps = await generateGetStaticProps(r)(context)
+        async (
+          r: ApiEnvironment,
+          context: DecodedContext,
+        ): Promise<boolean> => {
+          const staticProps: StaticProps = await generateGetStaticProps(r)(
+            context,
+          )
 
-          const isValid = fp.either.isRight(staticProps.props.subBreedImages)
+          const isValid: boolean = fp.either.isRight(
+            staticProps.props.subBreedImages,
+          )
 
           expect(isValid).toBe(true)
 
@@ -1591,17 +1616,25 @@ describe('subBreed', () => {
     )
   })
 
-  it('subBreed generateGetStaticProps decodes valid data as Left', async () => {
+  it('subBreed generateGetStaticProps decodes invalid data as Left', async (): Promise<
+    void
+  > => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(() => fetchReturnFailure('failure')),
-        getStaticPropsContextArbitrary(),
-        async (r, context) => {
-          const staticProps = await generateGetStaticProps(r)(context)
+        environmentArbitrary(
+          (): Promise<Response> => fetchReturnFailure('failure'),
+        ),
+        getStaticPropsContextArbitrary<Query>(),
+        async (r: ApiEnvironment, context: RawContext): Promise<boolean> => {
+          const staticProps: StaticProps = await generateGetStaticProps(r)(
+            context,
+          )
 
-          const isInvalid = fp.either.isLeft(staticProps.props.subBreedImages)
+          const isInvalid: boolean = fp.either.isLeft(
+            staticProps.props.subBreedImages,
+          )
 
           expect(isInvalid).toBe(true)
 

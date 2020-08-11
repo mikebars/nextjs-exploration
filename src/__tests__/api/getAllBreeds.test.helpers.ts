@@ -1,4 +1,4 @@
-import { AllBreedsSuccess } from 'src/api/getAllBreeds'
+import type { AllBreedsSuccess } from 'src/api/getAllBreeds'
 
 export const defaultAllBreedsSuccess: AllBreedsSuccess = {
   message: {
