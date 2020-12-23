@@ -10,14 +10,16 @@ Scripts:
 /**
   * Next.js - https://nextjs.org/docs/api-reference/cli
   */
+/** next build && next export && next serve */
+yarn next
 /** next build */
-yarn build
+yarn next:build
 /** next dev */
-yarn dev
+yarn next:dev
 /** next export */
-yarn export
+yarn next:export
 /** next start */
-yarn start
+yarn next:start
 
 /**
   * Linting
