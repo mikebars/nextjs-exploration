@@ -1,82 +1,279 @@
 {
-  /** `VS Code` */
+  /***************************************************************************/
+  /*                                                                         */
+  /* `nextjs-exploration` - Workspace - `devcontainer.json`                  */
+  /*                                                                         */
+  /***************************************************************************/
 
-  "name": "devcontainer",
+  // Codespaces-specific configuration.
+  // "codespaces": {},
 
-  "extensions": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "editorconfig.editorconfig",
-    "ms-vscode.vscode-typescript-tslint-plugin",
-    "orta.vscode-jest",
-    "stylelint.vscode-stylelint"
-  ],
-
-  "forwardPorts": [3000],
-
-  // "initializeCommand": "",
-
-  // "postAttachCommand": "",
-
-  "postCreateCommand": "yarn install",
-
-  // "postStartCommand": "",
-
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/zsh"
-  },
-
-  /** `Docker` */
-
-  // "appPort": 0,
-
-  "build": {
-    "args": {
-      "NODE_VERSION": "14.8.0",
-      "OH_MY_ZSH_PLUGINS": "( git node npm npx yarn )",
-      "OH_MY_ZSH_THEME": "geoffgarside",
-      "USER": "node",
-      "VARIANT": "stretch",
-      "YARN_VERSION": "1.22.4"
-    },
-    // "context": ".",
-    "dockerfile": "Dockerfile"
-    // "target": ""
-  },
-
+  // The port VS Code can use to connect to its backend.
   // "devPort": 0,
 
-  // "image": "node",
+  // An array of extensions that should be installed into the container.
+  "extensions": [
+    "bradlc.vscode-tailwindcss",
+    "coenraads.bracket-pair-colorizer",
+    "csstools.postcss",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "johnpapa.vscode-peacock",
+    "jpoissonnier.vscode-styled-components",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-ssh-edit",
+    "ms-vscode-remote.remote-wsl",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "ms-vsliveshare.vsliveshare",
+    "mutantdino.resourcemonitor",
+    "orta.vscode-jest",
+    "stylelint.vscode-stylelint",
+    "vscode-icons-team.vscode-icons",
+    "wallabyjs.quokka-vscode"
+  ],
 
-  "containerEnv": {
-    "CONTAINER_WORKSPACE_FOLDER": "${containerWorkspaceFolder}",
-    "CONTAINER_WORKSPACE_FOLDER_BASENAME": "${containerWorkspaceFolderBasename}",
-    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
-    "LOCAL_WORKSPACE_FOLDER_BASENAME": "${localWorkspaceFolderBasename}"
+  // Ports that are forwarded from the container to the local machine.
+  "forwardPorts": [3000],
+
+  // A command to run locally before anything else.
+  // If this is a single string, it will be run in a shell.
+  // If this is an array of strings, it will be run as a single command without shell.
+  // "initializeCommand": "",
+
+  // A name to show for the workspace folder.
+  "name": "nextjs-exploration",
+
+  // A command to run after attaching to the container.
+  // If this is a single string, it will be run in a shell.
+  // If this is an array of strings, it will be run as a single command without shell.
+  // "postAttachCommand": "",
+
+  // A command to run after creating the container.
+  // If this is a single string, it will be run in a shell.
+  // If this is an array of strings, it will be run as a single command without shell.
+  "postCreateCommand": "yarn reset",
+
+  // A command to run after starting the container.
+  // If this is a single string, it will be run in a shell.
+  // If this is an array of strings, it will be run as a single command without shell.
+  // "postStartCommand": "",
+
+  // Remote environment variables.
+  // "remoteEnv": {
+  //   // Path of the folder where the workspaces files can be found in the container.
+  //   // "CONTAINER_WORKSPACE_FOLDER": "${containerWorkspaceFolder}",
+
+  //   // Name of the folder where the workspace files can be found in the container.
+  //   // "CONTAINER_WORKSPACE_FOLDER_BASENAME": "${containerWorkspaceFolderBasename}",
+
+  //   // Path of the local folder that was opened in VS Code (that contains .devcontainer/devcontainer.json).
+  //   // "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+
+  //   // Name of the local folder that was opened in VS Code (that contains .devcontainer/devcontainer.json).
+  //   // "LOCAL_WORKSPACE_FOLDER_BASENAME": "${localWorkspaceFolderBasename}",
+  // },
+
+  // The user VS Code Server will be started with.
+  // The default is the same user as the container.
+  "remoteUser": "node",
+
+  // Machine specific settings that should be copied into the container.
+  "settings": {
+    /***************************************************************************/
+    /*                                                                         */
+    /* `nextjs-exploration` - Container - `settings.json`                      */
+    /*                                                                         */
+    /***************************************************************************/
+
+    /* `terminal` */
+
+    // The path of the shell that the terminal uses on Linux (default: /usr/bin/zsh).
+    "terminal.integrated.shell.linux": "/bin/zsh",
+
+    /***************************************************************************/
+    /*                                                                         */
+    /* `nextjs-exploration` - Container - Extensions - `settings.json`         */
+    /*                                                                         */
+    /***************************************************************************/
+
+    /* `remote` */
+
+    // Configures the list of extensions to always install while creating a container.
+    "remote.containers.defaultExtensions": [
+      "bradlc.vscode-tailwindcss",
+      "coenraads.bracket-pair-colorizer",
+      "csstools.postcss",
+      "dbaeumer.vscode-eslint",
+      "editorconfig.editorconfig",
+      "esbenp.prettier-vscode",
+      "johnpapa.vscode-peacock",
+      "jpoissonnier.vscode-styled-components",
+      "ms-azuretools.vscode-docker",
+      "ms-vscode.vscode-typescript-tslint-plugin",
+      "ms-vscode-remote.remote-containers",
+      "ms-vscode-remote.remote-ssh",
+      "ms-vscode-remote.remote-ssh-edit",
+      "ms-vscode-remote.remote-wsl",
+      "ms-vscode-remote.vscode-remote-extensionpack",
+      "ms-vsliveshare.vsliveshare",
+      "mutantdino.resourcemonitor",
+      "orta.vscode-jest",
+      "stylelint.vscode-stylelint",
+      "vscode-icons-team.vscode-icons",
+      "wallabyjs.quokka-vscode"
+    ],
+
+    // The log level for the extension.
+    "remote.containers.logLevel": "trace",
+
+    // When enabled extensions are downloaded locally and installed on remote.
+    "remote.downloadExtensionsLocally": false,
+
+    // // Override the kind of an extension.
+    // `ui` extensions are installed and run on the local machine
+    // while `workspace` extensions are run on the remote.
+    // By overriding an extension's default kind using this setting,
+    // you specify if that extension should be installed and enabled locally or remotely.
+    "remote.extensionKind": {
+      "bradlc.vscode-tailwindcss": ["workspace"],
+      "coenraads.bracket-pair-colorizer": ["workspace"],
+      "csstools.postcss": ["workspace"],
+      "dbaeumer.vscode-eslint": ["workspace"],
+      "editorconfig.editorconfig": ["workspace"],
+      "esbenp.prettier-vscode": ["workspace"],
+      "johnpapa.vscode-peacock": ["workspace"],
+      "jpoissonnier.vscode-styled-components": ["workspace"],
+      "ms-azuretools.vscode-docker": ["workspace"],
+      "ms-vscode.vscode-typescript-tslint-plugin": ["workspace"],
+      "ms-vscode-remote.remote-containers": ["ui"],
+      "ms-vscode-remote.remote-ssh": ["ui"],
+      "ms-vscode-remote.remote-ssh-edit": ["ui"],
+      "ms-vscode-remote.remote-wsl": ["ui"],
+      "ms-vscode-remote.vscode-remote-extensionpack": ["ui"],
+      "ms-vsliveshare.vsliveshare": ["workspace"],
+      "mutantdino.resourcemonitor": ["workspace"],
+      "orta.vscode-jest": ["workspace"],
+      "stylelint.vscode-stylelint": ["workspace"],
+      "vscode-icons-team.vscode-icons": ["workspace"],
+      "wallabyjs.quokka-vscode": ["workspace"]
+    }
   },
 
-  // "containerUser": "root",
+  // User environment probe to run.
+  // The default is none.
+  // "userEnvProbe": "none",
 
+  /***************************************************************************/
+  /*                                                                         */
+  /* `nextjs-exploration` - Workspace - Docker - `devcontainer.json`         */
+  /*                                                                         */
+  /***************************************************************************/
+
+  // Application ports that are exposed by the container.
+  // This can be a single port or an array of ports.
+  // Each port can be a number or a string.
+  // A number is mapped to the same port on the host.
+  // A string is passed to Docker unchanged and can be used to map ports differently,
+  // e.g. "8000:8010".
+  // "appPort": 0,
+
+  // Docker build-related options.
+  // "build": {
+  //   // Build arguments.
+  //   // "args": {},
+
+  //   // The location of the context folder for building the Docker image.
+  //   // The path is relative to the folder containing the `devcontainer.json` file.
+  //   // "context": ".",
+
+  //   // The location of the Dockerfile that defines the contents of the container.
+  //   // The path is relative to the folder containing the `devcontainer.json` file.
+  //   // "dockerfile": "Dockerfile",
+
+  //   // Target stage in a multi-stage build.
+  //   // "target": "",
+  // },
+
+  // Container environment variables.
+  // "containerEnv": {
+  //   // Path of the folder where the workspaces files can be found in the container.
+  //   // "CONTAINER_WORKSPACE_FOLDER": "${containerWorkspaceFolder}",
+
+  //   // Name of the folder where the workspace files can be found in the container.
+  //   // "CONTAINER_WORKSPACE_FOLDER_BASENAME": "${containerWorkspaceFolderBasename}",
+
+  //   // Path of the local folder that was opened in VS Code (that contains .devcontainer/devcontainer.json).
+  //   // "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+
+  //   // Name of the local folder that was opened in VS Code (that contains .devcontainer/devcontainer.json).
+  //   // "LOCAL_WORKSPACE_FOLDER_BASENAME": "${localWorkspaceFolderBasename}",
+  // },
+
+  // The user the container will be started with.
+  // The default is the user on the Docker image.
+  // "containerUser": "",
+
+  // The location of the context folder for building the Docker image.
+  // The path is relative to the folder containing the `devcontainer.json` file.
+  // "context": ".",
+
+  // The location of the Dockerfile that defines the contents of the container.
+  // The path is relative to the folder containing the `devcontainer.json` file.
+  // "dockerFile": "Dockerfile",
+
+  // The docker image that will be used to create the container.
+  // "image": "",
+
+  // Mount points to set up when creating the container.
+  // See Docker's documentation for the --mount option for the supported syntax.
   // "mounts": [],
 
+  // Whether to overwrite the command specified in the image.
+  // The default is true.
   // "overrideCommand": true,
 
-  "remoteEnv": {
-    "CONTAINER_WORKSPACE_FOLDER": "${containerWorkspaceFolder}",
-    "CONTAINER_WORKSPACE_FOLDER_BASENAME": "${containerWorkspaceFolderBasename}",
-    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
-    "LOCAL_WORKSPACE_FOLDER_BASENAME": "${localWorkspaceFolderBasename}"
-  },
-
-  "remoteUser": "node"
-
+  // The arguments required when starting in the container.
   // "runArgs": [],
 
+  // Action to take when the VS Code window is closed.
+  // The default is to stop the container.
   // "shutdownAction": "stopContainer",
 
+  // Controls whether on Linux the container's user should be updated
+  // with the local user's UID and GID.
+  // On by default.
   // "updateRemoteUserUID": true,
 
-  // "workspaceFolder": "${localWorkspaceFolder}",
+  // The path of the workspace folder inside the container.
+  // "workspaceFolder": "/workspace",
 
-  // "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  // The --mount parameter for docker run.
+  // The default is to mount the project folder at /workspaces/$project.
+  // "workspaceMount": "",
+
+  /***************************************************************************/
+  /*                                                                         */
+  /* `nextjs-exploration` - Workspace - Docker Compose - `devcontainer.json` */
+  /*                                                                         */
+  /***************************************************************************/
+
+  // The name of the docker-compose file(s) used to start the services.
+  "dockerComposeFile": "docker-compose.yml",
+
+  // An array of services that should be started and stopped.
+  // "runServices": [],
+
+  // The service you want to work on.
+  "service": "nextjs-exploration",
+
+  // Action to take when the VS Code window is closed.
+  // The default is to stop the containers.
+  // "shutdownAction": "stopCompose",
+
+  // The path of the workspace folder inside the container.
+  "workspaceFolder": "/workspace"
 }

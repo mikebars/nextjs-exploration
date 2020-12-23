@@ -8,14 +8,16 @@ describe('error', (): void => {
     expect.hasAssertions()
 
     const renderResult: RenderResult = render(
-      <ErrorComponent error={Error('')} />,
+      <ErrorComponent error={new Error('Error')} />,
     )
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>
         <div
           class="break-words w-3/4"
-        />
+        >
+          Error
+        </div>
       </DocumentFragment>
     `)
   })

@@ -1,8 +1,8 @@
 import * as fc from 'fast-check'
 import * as fp from 'fp-ts'
-import * as io from 'io-ts'
-import type { GetStaticPropsContext } from 'next'
-import type { ParsedUrlQuery } from 'querystring'
+import type { ValidationError as io_ValidationError } from 'io-ts'
+import type { GetStaticPropsContext as Next_GetStaticPropsContext } from 'next'
+import type { ParsedUrlQuery as qs_ParsedUrlQuery } from 'querystring'
 
 import {
   GetStaticPropsContextCodec,
@@ -21,15 +21,15 @@ describe('parsedUrlQueryCodec', (): void => {
     fc.assert(
       fc.property(
         parsedUrlQueryArbitrary(),
-        (parsedUrlQuery: ParsedUrlQuery): boolean => {
+        (parsedUrlQuery: qs_ParsedUrlQuery): boolean => {
           const decoded: fp.either.Either<
-            Array<io.ValidationError>,
-            ParsedUrlQuery
+            Array<io_ValidationError>,
+            qs_ParsedUrlQuery
           > = ParsedUrlQueryCodec.decode(parsedUrlQuery)
 
           const isValid: boolean = fp.either.isRight(decoded)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -45,13 +45,13 @@ describe('parsedUrlQueryCodec', (): void => {
         fc.constant(undefined),
         (parsedUrlQuery: unknown): boolean => {
           const decoded: fp.either.Either<
-            Array<io.ValidationError>,
-            ParsedUrlQuery
+            Array<io_ValidationError>,
+            qs_ParsedUrlQuery
           > = ParsedUrlQueryCodec.decode(parsedUrlQuery)
 
           const isInvalid: boolean = fp.either.isLeft(decoded)
 
-          expect(isInvalid).toBe(true)
+          expect(isInvalid).toBeTrue()
 
           return isInvalid
         },
@@ -67,15 +67,15 @@ describe('getStaticPropsContextCodec', (): void => {
     fc.assert(
       fc.property(
         getStaticPropsContextArbitrary(),
-        (getStaticPropsContext: GetStaticPropsContext): boolean => {
+        (getStaticPropsContext: Next_GetStaticPropsContext): boolean => {
           const decoded: fp.either.Either<
-            Array<io.ValidationError>,
-            GetStaticPropsContext
+            Array<io_ValidationError>,
+            Next_GetStaticPropsContext
           > = GetStaticPropsContextCodec.decode(getStaticPropsContext)
 
           const isValid: boolean = fp.either.isRight(decoded)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -91,13 +91,13 @@ describe('getStaticPropsContextCodec', (): void => {
         fc.constant(undefined),
         (getStaticPropsContext: unknown): boolean => {
           const decoded: fp.either.Either<
-            Array<io.ValidationError>,
-            GetStaticPropsContext
+            Array<io_ValidationError>,
+            Next_GetStaticPropsContext
           > = GetStaticPropsContextCodec.decode(getStaticPropsContext)
 
           const isInvalid: boolean = fp.either.isLeft(decoded)
 
-          expect(isInvalid).toBe(true)
+          expect(isInvalid).toBeTrue()
 
           return isInvalid
         },
@@ -113,17 +113,17 @@ describe('getStaticPropsDecodedContextCodec', (): void => {
     fc.assert(
       fc.property(
         getStaticPropsContextArbitrary(),
-        (getStaticPropsContext: GetStaticPropsContext): boolean => {
+        (getStaticPropsContext: Next_GetStaticPropsContext): boolean => {
           const decoded: fp.either.Either<
-            Array<io.ValidationError>,
-            GetStaticPropsContext
+            Array<io_ValidationError>,
+            Next_GetStaticPropsContext
           > = GetStaticPropsDecodedContextCodec(ParsedUrlQueryCodec).decode(
             getStaticPropsContext,
           )
 
           const isValid: boolean = fp.either.isRight(decoded)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -139,15 +139,15 @@ describe('getStaticPropsDecodedContextCodec', (): void => {
         fc.constant(undefined),
         (getStaticPropsContext: unknown): boolean => {
           const decoded: fp.either.Either<
-            Array<io.ValidationError>,
-            GetStaticPropsContext
+            Array<io_ValidationError>,
+            Next_GetStaticPropsContext
           > = GetStaticPropsDecodedContextCodec(ParsedUrlQueryCodec).decode(
             getStaticPropsContext,
           )
 
           const isInvalid: boolean = fp.either.isLeft(decoded)
 
-          expect(isInvalid).toBe(true)
+          expect(isInvalid).toBeTrue()
 
           return isInvalid
         },

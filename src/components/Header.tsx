@@ -6,7 +6,7 @@ export type Props = PropsWithChildren<ClassNameProps>
 
 export const Header: FC<Props> = (props: Props): ReactElement => {
   return (
-    <div className={concatClassName(props.className, 'text-2xl')}>
+    <div className={concatClassName(props.classNameProp, 'text-2xl')}>
       {props.children}
     </div>
   )

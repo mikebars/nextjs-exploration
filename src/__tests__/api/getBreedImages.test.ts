@@ -15,17 +15,20 @@ import {
 } from 'src/__tests__/lib/api.test.helpers'
 
 describe('generateGetBreedImages', (): void => {
-  it('generateGetBreedImages should produce valid output for valid input', async (): Promise<
-    void
-  > => {
+  it('generateGetBreedImages should produce valid output for valid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string() }),
         environmentArbitrary(
-          (): Promise<Response> =>
-            fetchReturnSuccess(defaultBreedImagesSuccess),
+          async (): Promise<Response> => {
+            const response: Response = await fetchReturnSuccess(
+              defaultBreedImagesSuccess,
+            )
+
+            return response
+          },
         ),
         async (
           params: GenerateGetBreedImagesParams,
@@ -37,7 +40,7 @@ describe('generateGetBreedImages', (): void => {
 
           const isValid: boolean = fp.either.isRight(response)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -45,16 +48,18 @@ describe('generateGetBreedImages', (): void => {
     )
   })
 
-  it('generateGetBreedImages should produce invalid output for invalid input', async (): Promise<
-    void
-  > => {
+  it('generateGetBreedImages should produce invalid output for invalid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string() }),
         environmentArbitrary(
-          (): Promise<Response> => fetchReturnFailure('failure'),
+          async (): Promise<Response> => {
+            const response: Response = await fetchReturnFailure('failure')
+
+            return response
+          },
         ),
         async (
           params: GenerateGetBreedImagesParams,
@@ -66,7 +71,7 @@ describe('generateGetBreedImages', (): void => {
 
           const isInvalid: boolean = fp.either.isLeft(response)
 
-          expect(isInvalid).toBe(true)
+          expect(isInvalid).toBeTrue()
 
           return isInvalid
         },

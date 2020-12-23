@@ -18,7 +18,7 @@ describe('concatClassName', (): void => {
 
           const isDefaultClassName: boolean = concatenated === defaultClassName
 
-          expect(isDefaultClassName).toBe(true)
+          expect(isDefaultClassName).toBeTrue()
 
           return isDefaultClassName
         },
@@ -43,7 +43,7 @@ describe('concatClassName', (): void => {
             defaultClassName,
           )
 
-          expect(includesDefaultClassName).toBe(true)
+          expect(includesDefaultClassName).toBeTrue()
 
           return includesDefaultClassName
         },

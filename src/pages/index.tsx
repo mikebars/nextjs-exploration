@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage as Next_NextPage } from 'next'
 import Head from 'next/head'
 import React, { ReactElement } from 'react'
 
@@ -6,18 +6,18 @@ import { Container } from 'src/components/Container'
 import { Header } from 'src/components/Header'
 import { Link } from 'src/components/Link'
 
-export const Index: NextPage = (): ReactElement => {
+export const Index: Next_NextPage = (): ReactElement => {
   return (
     <>
       <Head>
         <title>Dog Api!</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <Container className="p-6">
-        <Header className="p-3">Dog Api!</Header>
+      <Container classNameProp="p-6">
+        <Header classNameProp="p-3">Dog Api!</Header>
 
-        <Container className="p-3">
+        <Container classNameProp="p-3">
           <Link as="/breeds" href="/breeds">
             See all breeds
           </Link>

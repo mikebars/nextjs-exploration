@@ -11,22 +11,26 @@ import {
 } from 'src/__tests__/lib/api.test.helpers'
 
 describe('getAllBreeds', (): void => {
-  it('getAllBreeds should produce valid output for valid input', async (): Promise<
-    void
-  > => {
+  it('getAllBreeds should produce valid output for valid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         environmentArbitrary(
-          (): Promise<Response> => fetchReturnSuccess(defaultAllBreedsSuccess),
+          async (): Promise<Response> => {
+            const response: Response = await fetchReturnSuccess(
+              defaultAllBreedsSuccess,
+            )
+
+            return response
+          },
         ),
         async (r: ApiEnvironment): Promise<boolean> => {
           const response: AllBreeds = await getAllBreeds(r)()
 
           const isValid: boolean = fp.either.isRight(response)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -34,22 +38,24 @@ describe('getAllBreeds', (): void => {
     )
   })
 
-  it('getAllBreeds should produce invalid output for invalid input', async (): Promise<
-    void
-  > => {
+  it('getAllBreeds should produce invalid output for invalid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         environmentArbitrary(
-          (): Promise<Response> => fetchReturnFailure('failure'),
+          async (): Promise<Response> => {
+            const response: Response = await fetchReturnFailure('failure')
+
+            return response
+          },
         ),
         async (r: ApiEnvironment): Promise<boolean> => {
           const response: AllBreeds = await getAllBreeds(r)()
 
           const isInvalid: boolean = fp.either.isLeft(response)
 
-          expect(isInvalid).toBe(true)
+          expect(isInvalid).toBeTrue()
 
           return isInvalid
         },

@@ -1,36 +1,29 @@
-/**
- * @typedef {{
- *  plugins: Array<string | [string, Record<string, unknown>]>
- * }} PostCSSConfig
- */
+/***************************************************************************/
+/*                                                                         */
+/* `nextjs-exploration` - Workspace - `postcss.config.js`                  */
+/*                                                                         */
+/***************************************************************************/
 
-/**
- * @type {PostCSSConfig}
- */
-const defaultPostCSSConfig = {
-  plugins: [
-    'postcss-flexbugs-fixes',
-    [
-      'postcss-preset-env',
-      {
-        autoprefixer: {
-          flexbox: 'no-2009',
-        },
-        features: {
-          'custom-properties': false,
-        },
-        stage: 3,
-      },
-    ],
-  ],
-}
-
-/**
- * @type {PostCSSConfig}
- */
+/** @type {import('postcss.config').PostCSSConfig} */
 const postCSSConfig = {
-  ...defaultPostCSSConfig,
-  plugins: ['postcss-import', 'tailwindcss', ...defaultPostCSSConfig.plugins],
+  /* eslint-disable sort-keys */
+  /* tslint:disable: object-literal-sort-keys */
+  plugins: {
+    'postcss-import': {},
+    tailwindcss: {},
+    'postcss-flexbugs-fixes': {},
+    'postcss-preset-env': {
+      autoprefixer: {
+        flexbox: 'no-2009',
+      },
+      features: {
+        'custom-properties': false,
+      },
+      stage: 3,
+    },
+  },
+  /* tslint:enable: object-literal-sort-keys */
+  /* eslint-enable sort-keys */
 }
 
 module.exports = postCSSConfig

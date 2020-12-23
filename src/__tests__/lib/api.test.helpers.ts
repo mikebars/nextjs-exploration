@@ -1,5 +1,8 @@
 import * as fc from 'fast-check'
-import * as fp from 'fp-ts'
+import type {
+  either as fp_either,
+  readerTaskEither as fp_readerTaskEither,
+} from 'fp-ts'
 import * as io from 'io-ts'
 
 import type { ApiEnvironment, Fetch, FetchParameters } from 'src/lib/api'
@@ -27,9 +30,8 @@ export const validationErrorsArbitrary: ValidationErrorsArbitrary = (): fc.Arbit
 
 export type FetchParamsArbitrary = () => fc.Arbitrary<FetchParameters>
 
-export const fetchParamsArbitrary: FetchParamsArbitrary = (): fc.Arbitrary<
-  FetchParameters
-> => fc.tuple(fc.string(), fc.constant(undefined))
+export const fetchParamsArbitrary: FetchParamsArbitrary = (): fc.Arbitrary<FetchParameters> =>
+  fc.tuple(fc.string(), fc.constant(undefined))
 
 export type EnvironmentArbitrary = <R extends ApiEnvironment>(
   fetch: Fetch,
@@ -55,33 +57,43 @@ export const fetchReturnSuccess: FetchReturnSuccess = async <A>(
   success: A,
 ): Promise<Response> => {
   const responseLike: Pick<Response, 'json'> = {
-    json: (): Promise<A> => Promise.resolve(success),
+    json: async (): Promise<A> => {
+      const json: A = await Promise.resolve(success)
+
+      return json
+    },
   }
 
-  const response: Response = responseLike as Response
+  const response: Response = await Promise.resolve(responseLike as Response)
 
-  return Promise.resolve(response)
+  return response
 }
 
 export type FetchReturnFailure = <A>(failure: A) => Promise<Response>
 
-export const fetchReturnFailure: FetchReturnFailure = <A>(
+export const fetchReturnFailure: FetchReturnFailure = async <A>(
   failure: A,
-): Promise<Response> => Promise.reject<Response>(failure)
+): Promise<Response> => {
+  const response: Response = await Promise.resolve(
+    (failure as unknown) as Response,
+  )
+
+  return response
+}
 
 export type ApiCallArbitrary = <
   R extends ApiEnvironment,
   E extends Array<Error>,
   A
 >(
-  callReturn: Promise<fp.either.Either<E, A>>,
-) => fc.Arbitrary<fp.readerTaskEither.ReaderTaskEither<R, E, A>>
+  callReturn: Promise<fp_either.Either<E, A>>,
+) => fc.Arbitrary<fp_readerTaskEither.ReaderTaskEither<R, E, A>>
 
 export const apiCallArbitrary: ApiCallArbitrary = <
   R extends ApiEnvironment,
   E extends Array<Error>,
   A
 >(
-  callReturn: Promise<fp.either.Either<E, A>>,
-): fc.Arbitrary<fp.readerTaskEither.ReaderTaskEither<R, E, A>> =>
+  callReturn: Promise<fp_either.Either<E, A>>,
+): fc.Arbitrary<fp_readerTaskEither.ReaderTaskEither<R, E, A>> =>
   fc.func(fc.func(fc.constant(callReturn)))

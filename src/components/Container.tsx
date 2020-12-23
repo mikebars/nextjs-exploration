@@ -8,7 +8,7 @@ export const Container: FC<Props> = (props: Props): ReactElement => {
   return (
     <div
       className={concatClassName(
-        props.className,
+        props.classNameProp,
         'flex flex-col items-center justify-center max-w-full',
       )}
     >

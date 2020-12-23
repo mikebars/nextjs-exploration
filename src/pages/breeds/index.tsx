@@ -1,6 +1,11 @@
 import * as fp from 'fp-ts'
 import unfetch from 'isomorphic-unfetch'
-import * as Next from 'next'
+import type {
+  GetStaticProps as Next_GetStaticProps,
+  GetStaticPropsContext as Next_GetStaticPropsContext,
+  GetStaticPropsResult as Next_GetStaticPropsResult,
+  NextPage as Next_NextPage,
+} from 'next'
 import Head from 'next/head'
 import React, { Fragment, ReactElement } from 'react'
 
@@ -39,7 +44,7 @@ export const sortBreeds: SortBreeds = (allBreeds: AllBreeds): SortedBreeds =>
     ),
   )
 
-export const Breeds: Next.NextPage<Props> = (props: Props): ReactElement => {
+export const Breeds: Next_NextPage<Props> = (props: Props): ReactElement => {
   const sortedBreeds: SortedBreeds = sortBreeds(props.allBreeds)
 
   return (
@@ -48,10 +53,10 @@ export const Breeds: Next.NextPage<Props> = (props: Props): ReactElement => {
         <title>All Breeds</title>
       </Head>
 
-      <Container className="p-6">
-        <Header className="p-3">All Breeds</Header>
+      <Container classNameProp="p-6">
+        <Header classNameProp="p-3">All Breeds</Header>
 
-        <Container className="space-y-1">
+        <Container classNameProp="space-y-1">
           {fp.pipeable.pipe(
             sortedBreeds,
             fp.either.fold(
@@ -93,11 +98,11 @@ export const Breeds: Next.NextPage<Props> = (props: Props): ReactElement => {
   )
 }
 
-export type RawContext = Next.GetStaticPropsContext
+export type RawContext = Next_GetStaticPropsContext
 
-export type StaticProps = Next.GetStaticPropsResult<Props>
+export type StaticProps = Next_GetStaticPropsResult<Props>
 
-export type GetStaticProps = Next.GetStaticProps<Props>
+export type GetStaticProps = Next_GetStaticProps<Props>
 
 export type GenerateGetStaticProps = fp.reader.Reader<
   ApiEnvironment,

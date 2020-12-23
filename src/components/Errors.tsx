@@ -15,10 +15,10 @@ export const Errors: FC<Props> = (props: Props): ReactElement => (
   <Container>
     <Header>Encountered the following errors:</Header>
 
-    <Container className="space-y-2">
+    <Container classNameProp="space-y-2">
       {props.errors.map(
         (error: Error): React.ReactElement<ErrorProps> => (
-          <ErrorComponent key={error.message} error={error} />
+          <ErrorComponent error={error} key={error.message} />
         ),
       )}
     </Container>

@@ -18,6 +18,18 @@ import {
   validationErrorsArbitrary,
 } from 'src/__tests__/lib/api.test.helpers'
 
+const fetchReturnSuccessAsync: () => Promise<Response> = async (): Promise<Response> => {
+  const response: Response = await fetchReturnSuccess('success')
+
+  return response
+}
+
+const fetchReturnFailureAsync: () => Promise<Response> = async (): Promise<Response> => {
+  const response: Response = await fetchReturnFailure('failure')
+
+  return response
+}
+
 describe('mapValidationErrorToError', (): void => {
   it('mapValidationErrorToError should produce output of equal length to input', (): void => {
     expect.hasAssertions()
@@ -33,7 +45,7 @@ describe('mapValidationErrorToError', (): void => {
           const isSameLength: boolean =
             errors.length === validationErrors.length
 
-          expect(isSameLength).toBe(true)
+          expect(isSameLength).toBeTrue()
 
           return isSameLength
         },
@@ -43,17 +55,13 @@ describe('mapValidationErrorToError', (): void => {
 })
 
 describe('generateApiCall', (): void => {
-  it('generateApiCall should produce valid output from valid input', async (): Promise<
-    void
-  > => {
+  it('generateApiCall should produce valid output from valid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fetchParamsArbitrary(),
-        environmentArbitrary(
-          (): Promise<Response> => fetchReturnSuccess('success'),
-        ),
+        environmentArbitrary(fetchReturnSuccessAsync),
         async (input: FetchParameters, r: ApiEnvironment): Promise<boolean> => {
           const response: fp.either.Either<
             Array<Error>,
@@ -62,7 +70,7 @@ describe('generateApiCall', (): void => {
 
           const isValid: boolean = fp.either.isRight(response)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -70,17 +78,13 @@ describe('generateApiCall', (): void => {
     )
   })
 
-  it('generateApiCall should produce invalid output from invalid input', async (): Promise<
-    void
-  > => {
+  it('generateApiCall should produce invalid output from invalid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fetchParamsArbitrary(),
-        environmentArbitrary(
-          (): Promise<Response> => fetchReturnFailure('failure'),
-        ),
+        environmentArbitrary(fetchReturnFailureAsync),
         async (input: FetchParameters, r: ApiEnvironment): Promise<boolean> => {
           const response: fp.either.Either<
             Array<Error>,
@@ -89,7 +93,7 @@ describe('generateApiCall', (): void => {
 
           const isValid: boolean = fp.either.isLeft(response)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -99,17 +103,13 @@ describe('generateApiCall', (): void => {
 })
 
 describe('decodeApiCall', (): void => {
-  it('decodeApiCall should produce valid output from valid input', async (): Promise<
-    void
-  > => {
+  it('decodeApiCall should produce valid output from valid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fc.constant(io.unknown),
-        environmentArbitrary(
-          (): Promise<Response> => fetchReturnSuccess('success'),
-        ),
+        environmentArbitrary(fetchReturnSuccessAsync),
         apiCallArbitrary(Promise.resolve(fp.either.right('success'))),
         async (
           d: io.UnknownC,
@@ -127,7 +127,7 @@ describe('decodeApiCall', (): void => {
 
           const isValid: boolean = fp.either.isRight(response)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -135,18 +135,16 @@ describe('decodeApiCall', (): void => {
     )
   })
 
-  it('decodeApiCall should produce invalid output from invalid input', async (): Promise<
-    void
-  > => {
+  it('decodeApiCall should produce invalid output from invalid input', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         fc.constant(io.unknown),
-        environmentArbitrary(
-          (): Promise<Response> => fetchReturnFailure('failure'),
+        environmentArbitrary(fetchReturnFailureAsync),
+        apiCallArbitrary(
+          Promise.resolve(fp.either.left([new Error('failure')])),
         ),
-        apiCallArbitrary(Promise.resolve(fp.either.left([Error('failure')]))),
         async (
           d: io.UnknownC,
           r: ApiEnvironment,
@@ -163,7 +161,7 @@ describe('decodeApiCall', (): void => {
 
           const isInvalid: boolean = fp.either.isLeft(response)
 
-          expect(isInvalid).toBe(true)
+          expect(isInvalid).toBeTrue()
 
           return isInvalid
         },

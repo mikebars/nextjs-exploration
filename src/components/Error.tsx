@@ -8,7 +8,7 @@ export type Props = ClassNameProps & {
 
 export const Error: FC<Props> = (props: Props): ReactElement => {
   return (
-    <div className={concatClassName(props.className, 'break-words w-3/4')}>
+    <div className={concatClassName(props.classNameProp, 'break-words w-3/4')}>
       {props.error.message}
     </div>
   )

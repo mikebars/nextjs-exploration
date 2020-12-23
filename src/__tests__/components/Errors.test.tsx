@@ -7,7 +7,9 @@ describe('errors', (): void => {
   it('errors snapshot test', (): void => {
     expect.hasAssertions()
 
-    const renderResult: RenderResult = render(<Errors errors={[Error('')]} />)
+    const renderResult: RenderResult = render(
+      <Errors errors={[new Error('Error')]} />,
+    )
 
     expect(renderResult.asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>
@@ -24,7 +26,9 @@ describe('errors', (): void => {
           >
             <div
               class="break-words w-3/4"
-            />
+            >
+              Error
+            </div>
           </div>
         </div>
       </DocumentFragment>

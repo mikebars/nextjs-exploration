@@ -1,7 +1,13 @@
 import * as fp from 'fp-ts'
 import * as io from 'io-ts'
 import unfetch from 'isomorphic-unfetch'
-import * as Next from 'next'
+import type {
+  GetStaticPaths as Next_GetStaticPaths,
+  GetStaticProps as Next_GetStaticProps,
+  GetStaticPropsContext as Next_GetStaticPropsContext,
+  GetStaticPropsResult as Next_GetStaticPropsResult,
+  NextPage as Next_NextPage,
+} from 'next'
 import Head from 'next/head'
 import React, { ReactElement } from 'react'
 
@@ -33,25 +39,25 @@ export type Query = {
   breed: string
 }
 
-export const Breed: Next.NextPage<Props> = (props: Props): ReactElement => {
+export const Breed: Next_NextPage<Props> = (props: Props): ReactElement => {
   return (
     <>
       <Head>
         <title>Breed: </title>
       </Head>
 
-      <Container className="p-6">
+      <Container classNameProp="p-6">
         {fp.pipeable.pipe(
           props.context,
           fp.either.fold(
             (errors: Array<Error>): ReactElement => <Errors errors={errors} />,
             ({ params: { breed } }: DecodedContext): ReactElement => (
-              <Header className="p-3">{`Images of: ${breed}`}</Header>
+              <Header classNameProp="p-3">{`Images of: ${breed}`}</Header>
             ),
           ),
         )}
 
-        <Container className="space-y-4">
+        <Container classNameProp="space-y-4">
           {fp.pipeable.pipe(
             props.breedImages,
             fp.either.fold(
@@ -83,7 +89,7 @@ export const Breed: Next.NextPage<Props> = (props: Props): ReactElement => {
 
 export type StaticPaths = GetStaticPathsResult<Query>
 
-export type GetStaticPaths = Next.GetStaticPaths<Query>
+export type GetStaticPaths = Next_GetStaticPaths<Query>
 
 export type GenerateGetStaticPaths = fp.reader.Reader<
   ApiEnvironment,
@@ -115,7 +121,7 @@ export const getStaticPaths: GetStaticPaths = generateGetStaticPaths({
   fetch: unfetch,
 })
 
-export type RawContext = Next.GetStaticPropsContext<Query>
+export type RawContext = Next_GetStaticPropsContext<Query>
 
 export type DecodedContext = GetStaticPropsDecodedContext<Query>
 
@@ -129,9 +135,9 @@ export const ContextCodec: io.Type<DecodedContext> = GetStaticPropsDecodedContex
 
 export type Context = fp.either.Either<Array<Error>, DecodedContext>
 
-export type StaticProps = Next.GetStaticPropsResult<Props>
+export type StaticProps = Next_GetStaticPropsResult<Props>
 
-export type GetStaticProps = Next.GetStaticProps<Props, Query>
+export type GetStaticProps = Next_GetStaticProps<Props, Query>
 
 export const generateGetStaticProps: fp.reader.Reader<
   ApiEnvironment,
@@ -142,6 +148,9 @@ export const generateGetStaticProps: fp.reader.Reader<
   const context: Context = fp.pipeable.pipe(
     ContextCodec.decode(rawContext),
     fp.either.mapLeft(mapValidationErrorToError),
+    fp.either.map(
+      fp.record.filter(Boolean) as (rc: RawContext) => DecodedContext,
+    ),
   )
 
   const getBreedImages: GetBreedImages = fp.pipeable.pipe(

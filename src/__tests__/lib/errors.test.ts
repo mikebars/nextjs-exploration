@@ -11,6 +11,7 @@ describe('errorsMap', (): void => {
         const output: Array<Error> = errorsMap(input)
 
         const inputAndOutputEmpty: boolean =
+          /* eslint-disable-next-line no-magic-numbers */
           input.length === 0 && output.length === 0
 
         const containsInput: boolean = output.some((o: Error): boolean =>
@@ -19,7 +20,7 @@ describe('errorsMap', (): void => {
 
         const test: boolean = inputAndOutputEmpty || containsInput
 
-        expect(test).toBe(true)
+        expect(test).toBeTrue()
 
         return test
       }),
@@ -40,7 +41,7 @@ describe('errorsOf', (): void => {
           (o: Error): boolean => o.message === String(input),
         )
 
-        expect(containsInput).toBe(true)
+        expect(containsInput).toBeTrue()
 
         return containsInput
       }),

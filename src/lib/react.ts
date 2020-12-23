@@ -1,18 +1,18 @@
 export type ClassNameProps = {
-  className?: string
+  classNameProp?: string
 }
 
 export type ConcatClassName = (
-  className: string | undefined,
+  classNameProp: string | undefined,
   defaultClassName: string,
 ) => string
 
 export const concatClassName: ConcatClassName = (
-  className: string | undefined,
+  classNameProp: string | undefined,
   defaultClassName: string,
 ): string =>
-  typeof className === 'string'
-    ? `${className} ${defaultClassName}`
+  typeof classNameProp === 'string'
+    ? `${classNameProp} ${defaultClassName}`
     : defaultClassName
 
 export type EmptyProps = Record<string, unknown>

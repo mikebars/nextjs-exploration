@@ -1,4 +1,3 @@
-/* tslint:disable:max-file-line-count */
 import { render, RenderResult } from '@testing-library/react'
 import * as fc from 'fast-check'
 import * as fp from 'fp-ts'
@@ -1110,15 +1109,19 @@ describe('breeds', (): void => {
     `)
   })
 
-  it('breeds generateGetStaticProps decodes valid data as Right', async (): Promise<
-    void
-  > => {
+  it('breeds generateGetStaticProps decodes valid data as Right', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         environmentArbitrary(
-          (): Promise<Response> => fetchReturnSuccess(defaultAllBreedsSuccess),
+          async (): Promise<Response> => {
+            const response: Response = await fetchReturnSuccess(
+              defaultAllBreedsSuccess,
+            )
+
+            return response
+          },
         ),
         getStaticPropsContextArbitrary(),
         async (r: ApiEnvironment, context: RawContext): Promise<boolean> => {
@@ -1126,11 +1129,11 @@ describe('breeds', (): void => {
             context,
           )
 
-          const isValid: boolean = fp.either.isRight(
-            staticProps.props.allBreeds,
-          )
+          const isValid: boolean =
+            'props' in staticProps &&
+            fp.either.isRight(staticProps.props.allBreeds)
 
-          expect(isValid).toBe(true)
+          expect(isValid).toBeTrue()
 
           return isValid
         },
@@ -1138,15 +1141,17 @@ describe('breeds', (): void => {
     )
   })
 
-  it('breeds generateGetStaticProps decodes invalid data as Left', async (): Promise<
-    void
-  > => {
+  it('breeds generateGetStaticProps decodes invalid data as Left', async (): Promise<void> => {
     expect.hasAssertions()
 
     await fc.assert(
       fc.asyncProperty(
         environmentArbitrary(
-          (): Promise<Response> => fetchReturnFailure('failure'),
+          async (): Promise<Response> => {
+            const response: Response = await fetchReturnFailure('failure')
+
+            return response
+          },
         ),
         getStaticPropsContextArbitrary(),
         async (r: ApiEnvironment, context: RawContext): Promise<boolean> => {
@@ -1154,11 +1159,11 @@ describe('breeds', (): void => {
             context,
           )
 
-          const isInvalid: boolean = fp.either.isLeft(
-            staticProps.props.allBreeds,
-          )
+          const isInvalid: boolean =
+            'props' in staticProps &&
+            fp.either.isLeft(staticProps.props.allBreeds)
 
-          expect(isInvalid).toBe(true)
+          expect(isInvalid).toBeTrue()
 
           return isInvalid
         },

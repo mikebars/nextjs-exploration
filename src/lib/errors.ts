@@ -7,4 +7,4 @@ export const errorsMap: ErrorsMap = <E extends Array<Error>>(
 export type ErrorsOf = <E extends Array<Error>>(u: unknown) => E
 
 export const errorsOf: ErrorsOf = <E extends Array<Error>>(u: unknown): E =>
-  Array.of(Error(String(u))) as E
+  Array.of(new Error(String(u))) as E

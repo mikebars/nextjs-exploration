@@ -1,4 +1,3 @@
-/* tslint:disable:max-file-line-count */
 import type { BreedImagesSuccess } from 'src/api/getBreedImages'
 
 export const defaultBreedImagesSuccess: BreedImagesSuccess = {
