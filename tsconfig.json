@@ -229,7 +229,7 @@
     "noErrorTruncation": true,
 
     // Report errors for fallthrough cases in switch statement.
-    "noFallthroughCasesInSwitch": false,
+    "noFallthroughCasesInSwitch": true,
 
     // Warn on expressions and declarations with an implied 'any' type.
     "noImplicitAny": true,
