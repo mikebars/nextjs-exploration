@@ -67,7 +67,7 @@
     "clean:eslint": "rm --force .eslintcache",
     "clean:jest": "rm --force --recursive .jestcache/ coverage/",
     "clean:next": "rm --force --recursive .next/ out/",
-    "clean:node": "rm --force --recursive node_modules/",
+    "clean:node": "rm --force --recursive **/node_modules/.** **/node_modules/**",
     "clean:npm": "rm --force npm-*.log npm-shrinkwrap.json package-lock.json && npm cache clear --force",
     "clean:stylelint": "rm --force .stylelintcache",
     "clean:tsc": "rm --force *.cpuprofile *.tsbuildinfo .cpuprofile .tsbuildinfo",
