@@ -256,7 +256,7 @@
         "plugin:react/all",
         "plugin:react-hooks/recommended",
         "plugin:sonarjs/recommended",
-        "plugin:testing-library/recommended",
+        "plugin:testing-library/dom",
         "plugin:unicorn/recommended",
 
         // `standard`
@@ -267,13 +267,7 @@
 
         // `prettier` - must be last
         "plugin:prettier/recommended",
-        "prettier",
-        "prettier/@typescript-eslint",
-        "prettier/babel",
-        "prettier/flowtype",
-        "prettier/react",
-        "prettier/standard",
-        "prettier/unicorn"
+        "prettier"
       ],
 
       // Glob pattern for files to apply 'overrides' configuration, relative to the directory of the config file.
@@ -656,6 +650,9 @@
           }
         ],
 
+        // ESLint rule enforcing function references are not passed directly to array methods.
+        "unicorn/no-array-callback-reference": "off",
+
         // ESLint rule enforcing function references are not passed directly to iterator methods.
         "unicorn/no-fn-reference-in-iterator": "off",
 
@@ -876,7 +873,7 @@
         "plugin:react/all",
         "plugin:react-hooks/recommended",
         "plugin:sonarjs/recommended",
-        "plugin:testing-library/recommended",
+        "plugin:testing-library/dom",
         "plugin:unicorn/recommended",
 
         // `standard`
@@ -887,12 +884,7 @@
 
         // `prettier` - must be last
         "plugin:prettier/recommended",
-        "prettier",
-        "prettier/@typescript-eslint",
-        "prettier/babel",
-        "prettier/react",
-        "prettier/standard",
-        "prettier/unicorn"
+        "prettier"
       ],
 
       // Glob pattern for files to apply 'overrides' configuration, relative to the directory of the config file.
@@ -1313,6 +1305,9 @@
             // "ignore": []
           }
         ],
+
+        // ESLint rule enforcing function references are not passed directly to array methods.
+        "unicorn/no-array-callback-reference": "off",
 
         // ESLint rule enforcing function references are not passed directly to iterator methods.
         "unicorn/no-fn-reference-in-iterator": "off",

@@ -4,11 +4,14 @@ import type {
   GetStaticPropsContext as Next_GetStaticPropsContext,
 } from 'next'
 import type { ParsedUrlQuery as qs_ParsedUrlQuery } from 'querystring'
-import type { Any as tstb_Any, Object as tstb_Object } from 'ts-toolbelt'
 
-export type GetStaticPathsResult<
-  Query extends qs_ParsedUrlQuery
-> = tstb_Any.PromiseType<ReturnType<Next_GetStaticPaths<Query>>>
+export type PromiseType<P extends Promise<unknown>> = P extends Promise<infer A>
+  ? A
+  : P
+
+export type GetStaticPathsResult<Query extends qs_ParsedUrlQuery> = PromiseType<
+  ReturnType<Next_GetStaticPaths<Query>>
+>
 
 export type GetStaticPathsReturn<Query extends qs_ParsedUrlQuery> = Promise<
   GetStaticPathsResult<Query>
@@ -39,7 +42,7 @@ export const GetStaticPropsContextCodec: io.Type<Next_GetStaticPropsContext> = i
 export type GetStaticPropsDecodedContext<
   Query extends qs_ParsedUrlQuery,
   Context extends Next_GetStaticPropsContext<Query> = Next_GetStaticPropsContext<Query>
-> = tstb_Object.Required<Context, 'params'>
+> = Omit<Context, 'params'> & { params: Query }
 
 export type GetStaticPropsDecodedContextCodec = <
   Query extends qs_ParsedUrlQuery
