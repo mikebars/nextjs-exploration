@@ -9,9 +9,8 @@ describe('app', (): void => {
   it('app snapshot test', (): void => {
     expect.hasAssertions()
 
-    const AppWithRouter: ComponentType<
-      Next_ExcludeRouterProps<AppProps>
-    > = withRouter(App)
+    const AppWithRouter: ComponentType<Next_ExcludeRouterProps<AppProps>> =
+      withRouter(App)
 
     const renderResult: RenderResult = render(
       <AppWithRouter

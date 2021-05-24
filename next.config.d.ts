@@ -78,6 +78,8 @@ export type DefaultNextConfig = {
 
   future?: {
     excludeDefaultMomentLocales?: boolean
+    strictPostcssConfiguration?: boolean
+    webpack5?: boolean
   }
 
   generateBuildId?: () => Promise<string>

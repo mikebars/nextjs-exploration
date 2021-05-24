@@ -23,11 +23,12 @@ import {
 } from 'src/__tests__/lib/api.test.helpers'
 import { getStaticPropsContextArbitrary } from 'src/__tests__/lib/next.test.helpers'
 
-const fetchReturnFailureAsync: () => Promise<Response> = async (): Promise<Response> => {
-  const response: Response = await fetchReturnFailure('failure')
+const fetchReturnFailureAsync: () => Promise<Response> =
+  async (): Promise<Response> => {
+    const response: Response = await fetchReturnFailure('failure')
 
-  return response
-}
+    return response
+  }
 
 describe('subBreed', (): void => {
   it('subBreed snapshot test Left', (): void => {
@@ -1546,15 +1547,13 @@ describe('subBreed', (): void => {
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnSuccess(
-              defaultAllBreedsSuccess,
-            )
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnSuccess(
+            defaultAllBreedsSuccess,
+          )
 
-            return response
-          },
-        ),
+          return response
+        }),
         async (r: ApiEnvironment): Promise<boolean> => {
           const staticPaths: StaticPaths = await generateGetStaticPaths(r)({})
 
@@ -1592,15 +1591,13 @@ describe('subBreed', (): void => {
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnSuccess(
-              defaultSubBreedImagesSuccess,
-            )
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnSuccess(
+            defaultSubBreedImagesSuccess,
+          )
 
-            return response
-          },
-        ),
+          return response
+        }),
         getStaticPropsContextArbitrary(
           fc.record({ breed: fc.string(), subBreed: fc.string() }),
         ),

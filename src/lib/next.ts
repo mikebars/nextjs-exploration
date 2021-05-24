@@ -3,6 +3,7 @@ import type {
   GetStaticPaths as Next_GetStaticPaths,
   GetStaticPropsContext as Next_GetStaticPropsContext,
 } from 'next'
+/* eslint-disable-next-line unicorn/prefer-node-protocol */
 import type { ParsedUrlQuery as qs_ParsedUrlQuery } from 'querystring'
 
 export type PromiseType<P extends Promise<unknown>> = P extends Promise<infer A>
@@ -17,9 +18,8 @@ export type GetStaticPathsReturn<Query extends qs_ParsedUrlQuery> = Promise<
   GetStaticPathsResult<Query>
 >
 
-export type Paths<
-  Query extends qs_ParsedUrlQuery
-> = GetStaticPathsResult<Query>['paths']
+export type Paths<Query extends qs_ParsedUrlQuery> =
+  GetStaticPathsResult<Query>['paths']
 
 export type Path<Query extends qs_ParsedUrlQuery> = Paths<Query>[number]
 
@@ -31,34 +31,38 @@ export const ParsedUrlQueryCodec: io.Type<qs_ParsedUrlQuery> = io.record(
 /* eslint-disable-next-line @typescript-eslint/no-redeclare */
 export type ParsedUrlQueryCodec = typeof ParsedUrlQueryCodec
 
-export const GetStaticPropsContextCodec: io.Type<Next_GetStaticPropsContext> = io.partial(
-  {
+export const GetStaticPropsContextCodec: io.Type<Next_GetStaticPropsContext> =
+  io.partial({
     params: ParsedUrlQueryCodec,
     preview: io.union([io.boolean, io.undefined]),
-    previewData: io.unknown,
-  },
-)
+    previewData: io.union([
+      /* eslint-disable-next-line @typescript-eslint/ban-types */
+      io.UnknownRecord as io.Type<object>,
+      io.literal(false),
+      io.string,
+      io.undefined,
+    ]),
+  })
 
 export type GetStaticPropsDecodedContext<
   Query extends qs_ParsedUrlQuery,
-  Context extends Next_GetStaticPropsContext<Query> = Next_GetStaticPropsContext<Query>
+  Context extends Next_GetStaticPropsContext<Query> = Next_GetStaticPropsContext<Query>,
 > = Omit<Context, 'params'> & { params: Query }
 
 export type GetStaticPropsDecodedContextCodec = <
-  Query extends qs_ParsedUrlQuery
+  Query extends qs_ParsedUrlQuery,
 >(
   queryC: io.Type<Query>,
 ) => io.Type<GetStaticPropsDecodedContext<Query>>
 
 /* eslint-disable-next-line @typescript-eslint/no-redeclare */
-export const GetStaticPropsDecodedContextCodec: GetStaticPropsDecodedContextCodec = <
-  Query extends qs_ParsedUrlQuery
->(
-  queryC: io.Type<Query>,
-): io.Type<GetStaticPropsDecodedContext<Query>> =>
-  io.intersection([
-    GetStaticPropsContextCodec,
-    io.type({
-      params: queryC,
-    }),
-  ])
+export const GetStaticPropsDecodedContextCodec: GetStaticPropsDecodedContextCodec =
+  <Query extends qs_ParsedUrlQuery>(
+    queryC: io.Type<Query>,
+  ): io.Type<GetStaticPropsDecodedContext<Query>> =>
+    io.intersection([
+      GetStaticPropsContextCodec,
+      io.type({
+        params: queryC,
+      }),
+    ])

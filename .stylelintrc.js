@@ -4,7 +4,8 @@
 /*                                                                         */
 /***************************************************************************/
 
-/* eslint-disable capitalized-comments, multiline-comment-style */
+/* eslint-disable capitalized-comments, multiline-comment-style, unicorn/prefer-module */
+
 /** @type {Partial<import('stylelint').Configuration>} */
 const stylelintRC = {
   // The default severity level for all rules that do not have a severity specified in their secondary options.
@@ -63,6 +64,7 @@ const stylelintRC = {
     'prettier/prettier': true,
   },
 }
-/* eslint-enable capitalized-comments, multiline-comment-style */
 
 module.exports = stylelintRC
+
+/* eslint-enable capitalized-comments, multiline-comment-style, unicorn/prefer-module */

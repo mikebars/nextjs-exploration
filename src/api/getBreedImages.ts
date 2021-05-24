@@ -32,7 +32,7 @@ export type GenerateGetBreedImages = (
 export const generateGetBreedImages: GenerateGetBreedImages = (
   params: GenerateGetBreedImagesParams,
 ): GetBreedImages =>
-  fp.pipeable.pipe(
+  fp.function.pipe(
     generateApiCall(`https://dog.ceo/api/breed/${params.breed}/images`),
     decodeApiCall(BreedImagesSuccessCodec),
   )

@@ -39,9 +39,8 @@ describe('concatClassName', (): void => {
             defaultClassName,
           )
 
-          const includesDefaultClassName: boolean = concatenated.includes(
-            defaultClassName,
-          )
+          const includesDefaultClassName: boolean =
+            concatenated.includes(defaultClassName)
 
           expect(includesDefaultClassName).toBeTrue()
 

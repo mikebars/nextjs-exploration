@@ -1114,15 +1114,13 @@ describe('breeds', (): void => {
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnSuccess(
-              defaultAllBreedsSuccess,
-            )
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnSuccess(
+            defaultAllBreedsSuccess,
+          )
 
-            return response
-          },
-        ),
+          return response
+        }),
         getStaticPropsContextArbitrary(),
         async (r: ApiEnvironment, context: RawContext): Promise<boolean> => {
           const staticProps: StaticProps = await generateGetStaticProps(r)(
@@ -1146,13 +1144,11 @@ describe('breeds', (): void => {
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnFailure('failure')
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnFailure('failure')
 
-            return response
-          },
-        ),
+          return response
+        }),
         getStaticPropsContextArbitrary(),
         async (r: ApiEnvironment, context: RawContext): Promise<boolean> => {
           const staticProps: StaticProps = await generateGetStaticProps(r)(

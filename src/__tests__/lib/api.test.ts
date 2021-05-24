@@ -18,17 +18,19 @@ import {
   validationErrorsArbitrary,
 } from 'src/__tests__/lib/api.test.helpers'
 
-const fetchReturnSuccessAsync: () => Promise<Response> = async (): Promise<Response> => {
-  const response: Response = await fetchReturnSuccess('success')
+const fetchReturnSuccessAsync: () => Promise<Response> =
+  async (): Promise<Response> => {
+    const response: Response = await fetchReturnSuccess('success')
 
-  return response
-}
+    return response
+  }
 
-const fetchReturnFailureAsync: () => Promise<Response> = async (): Promise<Response> => {
-  const response: Response = await fetchReturnFailure('failure')
+const fetchReturnFailureAsync: () => Promise<Response> =
+  async (): Promise<Response> => {
+    const response: Response = await fetchReturnFailure('failure')
 
-  return response
-}
+    return response
+  }
 
 describe('mapValidationErrorToError', (): void => {
   it('mapValidationErrorToError should produce output of equal length to input', (): void => {
@@ -38,9 +40,8 @@ describe('mapValidationErrorToError', (): void => {
       fc.property(
         validationErrorsArbitrary(),
         (validationErrors: Array<io.ValidationError>): boolean => {
-          const errors: Array<Error> = mapValidationErrorToError(
-            validationErrors,
-          )
+          const errors: Array<Error> =
+            mapValidationErrorToError(validationErrors)
 
           const isSameLength: boolean =
             errors.length === validationErrors.length
@@ -63,10 +64,8 @@ describe('generateApiCall', (): void => {
         fetchParamsArbitrary(),
         environmentArbitrary(fetchReturnSuccessAsync),
         async (input: FetchParameters, r: ApiEnvironment): Promise<boolean> => {
-          const response: fp.either.Either<
-            Array<Error>,
-            unknown
-          > = await generateApiCall(...input)(r)()
+          const response: fp.either.Either<Array<Error>, unknown> =
+            await generateApiCall(...input)(r)()
 
           const isValid: boolean = fp.either.isRight(response)
 
@@ -86,10 +85,8 @@ describe('generateApiCall', (): void => {
         fetchParamsArbitrary(),
         environmentArbitrary(fetchReturnFailureAsync),
         async (input: FetchParameters, r: ApiEnvironment): Promise<boolean> => {
-          const response: fp.either.Either<
-            Array<Error>,
-            unknown
-          > = await generateApiCall(...input)(r)()
+          const response: fp.either.Either<Array<Error>, unknown> =
+            await generateApiCall(...input)(r)()
 
           const isValid: boolean = fp.either.isLeft(response)
 
@@ -120,10 +117,8 @@ describe('decodeApiCall', (): void => {
             unknown
           >,
         ): Promise<boolean> => {
-          const response: fp.either.Either<
-            Array<Error>,
-            unknown
-          > = await decodeApiCall(d)(apiCall)(r)()
+          const response: fp.either.Either<Array<Error>, unknown> =
+            await decodeApiCall(d)(apiCall)(r)()
 
           const isValid: boolean = fp.either.isRight(response)
 
@@ -154,10 +149,8 @@ describe('decodeApiCall', (): void => {
             unknown
           >,
         ): Promise<boolean> => {
-          const response: fp.either.Either<
-            Array<Error>,
-            unknown
-          > = await decodeApiCall(d)(apiCall)(r)()
+          const response: fp.either.Either<Array<Error>, unknown> =
+            await decodeApiCall(d)(apiCall)(r)()
 
           const isInvalid: boolean = fp.either.isLeft(response)
 

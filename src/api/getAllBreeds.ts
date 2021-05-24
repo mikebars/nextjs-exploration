@@ -21,7 +21,7 @@ export type GetAllBreeds = fp.readerTaskEither.ReaderTaskEither<
   AllBreedsSuccess
 >
 
-export const getAllBreeds: GetAllBreeds = fp.pipeable.pipe(
+export const getAllBreeds: GetAllBreeds = fp.function.pipe(
   generateApiCall('https://dog.ceo/api/breeds/list/all'),
   decodeApiCall(AllBreedsSuccessCodec),
 )

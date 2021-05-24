@@ -8,12 +8,11 @@ export type SubBreedImagesSuccess = {
   status: 'success'
 }
 
-export const SubBreedImagesSuccessCodec: io.Type<SubBreedImagesSuccess> = io.type(
-  {
+export const SubBreedImagesSuccessCodec: io.Type<SubBreedImagesSuccess> =
+  io.type({
     message: io.array(io.string),
     status: io.literal('success'),
-  },
-)
+  })
 
 export type SubBreedImages = fp.either.Either<
   Array<Error>,
@@ -38,7 +37,7 @@ export type GenerateGetSubBreedImages = (
 export const generateGetSubBreedImages: GenerateGetSubBreedImages = (
   params: GenerateGetSubBreedImagesParams,
 ): GetSubBreedImages =>
-  fp.pipeable.pipe(
+  fp.function.pipe(
     generateApiCall(
       ` https://dog.ceo/api/breed/${params.breed}/${params.subBreed}/images`,
     ),

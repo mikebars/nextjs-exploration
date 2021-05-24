@@ -21,15 +21,13 @@ describe('generateGetBreedImages', (): void => {
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string() }),
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnSuccess(
-              defaultBreedImagesSuccess,
-            )
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnSuccess(
+            defaultBreedImagesSuccess,
+          )
 
-            return response
-          },
-        ),
+          return response
+        }),
         async (
           params: GenerateGetBreedImagesParams,
           r: ApiEnvironment,
@@ -54,13 +52,11 @@ describe('generateGetBreedImages', (): void => {
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string() }),
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnFailure('failure')
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnFailure('failure')
 
-            return response
-          },
-        ),
+          return response
+        }),
         async (
           params: GenerateGetBreedImagesParams,
           r: ApiEnvironment,

@@ -11,34 +11,34 @@ export type ValidationErrorsArbitrary = () => fc.Arbitrary<
   Array<io.ValidationError>
 >
 
-export const validationErrorsArbitrary: ValidationErrorsArbitrary = (): fc.Arbitrary<
-  Array<io.ValidationError>
-> =>
-  fc.array(
-    fc.record({
-      context: fc.array(
-        fc.record({
-          actual: fc.oneof(fc.anything(), fc.constant(undefined)),
-          key: fc.string(),
-          type: fc.constant(io.unknown),
-        }),
-      ),
-      message: fc.oneof(fc.string(), fc.constant(undefined)),
-      value: fc.anything(),
-    }),
-  )
+export const validationErrorsArbitrary: ValidationErrorsArbitrary =
+  (): fc.Arbitrary<Array<io.ValidationError>> =>
+    fc.array(
+      fc.record({
+        context: fc.array(
+          fc.record({
+            actual: fc.oneof(fc.anything(), fc.constant(undefined)),
+            key: fc.string(),
+            type: fc.constant(io.unknown),
+          }),
+        ),
+        message: fc.oneof(fc.string(), fc.constant(undefined)),
+        value: fc.anything(),
+      }),
+    )
 
 export type FetchParamsArbitrary = () => fc.Arbitrary<FetchParameters>
 
-export const fetchParamsArbitrary: FetchParamsArbitrary = (): fc.Arbitrary<FetchParameters> =>
-  fc.tuple(fc.string(), fc.constant(undefined))
+export const fetchParamsArbitrary: FetchParamsArbitrary =
+  (): fc.Arbitrary<FetchParameters> =>
+    fc.tuple(fc.string(), fc.constant(undefined))
 
 export type EnvironmentArbitrary = <R extends ApiEnvironment>(
   fetch: Fetch,
 ) => fc.Arbitrary<R>
 
 export const environmentArbitrary: EnvironmentArbitrary = <
-  R extends ApiEnvironment
+  R extends ApiEnvironment,
 >(
   fetch: Fetch,
 ): fc.Arbitrary<R> => {
@@ -75,7 +75,7 @@ export const fetchReturnFailure: FetchReturnFailure = async <A>(
   failure: A,
 ): Promise<Response> => {
   const response: Response = await Promise.resolve(
-    (failure as unknown) as Response,
+    failure as unknown as Response,
   )
 
   return response
@@ -84,7 +84,7 @@ export const fetchReturnFailure: FetchReturnFailure = async <A>(
 export type ApiCallArbitrary = <
   R extends ApiEnvironment,
   E extends Array<Error>,
-  A
+  A,
 >(
   callReturn: Promise<fp_either.Either<E, A>>,
 ) => fc.Arbitrary<fp_readerTaskEither.ReaderTaskEither<R, E, A>>
@@ -92,7 +92,7 @@ export type ApiCallArbitrary = <
 export const apiCallArbitrary: ApiCallArbitrary = <
   R extends ApiEnvironment,
   E extends Array<Error>,
-  A
+  A,
 >(
   callReturn: Promise<fp_either.Either<E, A>>,
 ): fc.Arbitrary<fp_readerTaskEither.ReaderTaskEither<R, E, A>> =>

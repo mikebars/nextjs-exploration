@@ -6,13 +6,20 @@
 
 /** @typedef {import('next.config').NextConfig} NextConfig */
 
+/* eslint-disable capitalized-comments, multiline-comment-style, unicorn/prefer-module */
+
 const path = require('path')
 
 const WebpackBundleAnalyzer = require('webpack-bundle-analyzer')
 
-/* eslint-disable capitalized-comments, multiline-comment-style */
 /** @type {NextConfig} */
 const nextConfig = () => ({
+  future: {
+    strictPostcssConfiguration: true,
+    webpack5: true,
+  },
+  poweredByHeader: false,
+  reactStrictMode: true,
   webpack: (config, options) => ({
     ...config,
     plugins: [
@@ -123,6 +130,7 @@ const nextConfig = () => ({
     },
   }),
 })
-/* eslint-enable capitalized-comments, multiline-comment-style */
 
 module.exports = nextConfig
+
+/* eslint-enable capitalized-comments, multiline-comment-style, unicorn/prefer-module */

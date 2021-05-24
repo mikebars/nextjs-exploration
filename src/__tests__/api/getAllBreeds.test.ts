@@ -16,15 +16,13 @@ describe('getAllBreeds', (): void => {
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnSuccess(
-              defaultAllBreedsSuccess,
-            )
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnSuccess(
+            defaultAllBreedsSuccess,
+          )
 
-            return response
-          },
-        ),
+          return response
+        }),
         async (r: ApiEnvironment): Promise<boolean> => {
           const response: AllBreeds = await getAllBreeds(r)()
 
@@ -43,13 +41,11 @@ describe('getAllBreeds', (): void => {
 
     await fc.assert(
       fc.asyncProperty(
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnFailure('failure')
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnFailure('failure')
 
-            return response
-          },
-        ),
+          return response
+        }),
         async (r: ApiEnvironment): Promise<boolean> => {
           const response: AllBreeds = await getAllBreeds(r)()
 

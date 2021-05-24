@@ -2,6 +2,7 @@ import * as fc from 'fast-check'
 import * as fp from 'fp-ts'
 import type { ValidationError as io_ValidationError } from 'io-ts'
 import type { GetStaticPropsContext as Next_GetStaticPropsContext } from 'next'
+/* eslint-disable-next-line unicorn/prefer-node-protocol */
 import type { ParsedUrlQuery as qs_ParsedUrlQuery } from 'querystring'
 
 import {

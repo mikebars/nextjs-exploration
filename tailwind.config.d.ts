@@ -5,17 +5,16 @@ import * as tstb from 'ts-toolbelt'
 /* eslint-disable no-magic-numbers */
 /* tslint:disable: no-magic-numbers */
 
-type DeepValues<
-  O extends Record<number | string | symbol, unknown>
-> = O extends Record<number | string | symbol, infer V>
-  ? V extends Record<number | string | symbol, unknown>
-    ? DeepValues<V>
-    : V
-  : {
-      [K in keyof O]: O[K] extends Record<number | string | symbol, unknown>
-        ? DeepValues<O[K]>
-        : O[K]
-    }[keyof O]
+type DeepValues<O extends Record<number | string | symbol, unknown>> =
+  O extends Record<number | string | symbol, infer V>
+    ? V extends Record<number | string | symbol, unknown>
+      ? DeepValues<V>
+      : V
+    : {
+        [K in keyof O]: O[K] extends Record<number | string | symbol, unknown>
+          ? DeepValues<O[K]>
+          : O[K]
+      }[keyof O]
 
 type CSSAbsoluteLengthUnit =
   // Centimeters (1cm = 96px/2.54)
@@ -631,7 +630,7 @@ type TailwindStyle = Record<
 >
 
 type TailwindThemeBreakpointsFunction = <
-  O extends Record<number | string | symbol, unknown>
+  O extends Record<number | string | symbol, unknown>,
 >(
   o: O,
 ) => {
@@ -639,7 +638,7 @@ type TailwindThemeBreakpointsFunction = <
 }
 
 type TailwindThemeNegativeFunction = <
-  O extends Record<number | string | symbol, unknown>
+  O extends Record<number | string | symbol, unknown>,
 >(
   o: O,
 ) => {

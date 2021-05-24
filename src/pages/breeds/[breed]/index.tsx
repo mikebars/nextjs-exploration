@@ -43,11 +43,21 @@ export const Breed: Next_NextPage<Props> = (props: Props): ReactElement => {
   return (
     <>
       <Head>
-        <title>Breed: </title>
+        {fp.function.pipe(
+          props.context,
+          fp.either.fold(
+            (_errors: Array<Error>): ReactElement => (
+              <title>An error occurred!</title>
+            ),
+            ({ params: { breed } }: DecodedContext): ReactElement => (
+              <title>Breed: {breed}</title>
+            ),
+          ),
+        )}
       </Head>
 
       <Container classNameProp="p-6">
-        {fp.pipeable.pipe(
+        {fp.function.pipe(
           props.context,
           fp.either.fold(
             (errors: Array<Error>): ReactElement => <Errors errors={errors} />,
@@ -58,7 +68,7 @@ export const Breed: Next_NextPage<Props> = (props: Props): ReactElement => {
         )}
 
         <Container classNameProp="space-y-4">
-          {fp.pipeable.pipe(
+          {fp.function.pipe(
             props.breedImages,
             fp.either.fold(
               (errors: Array<Error>): ReactElement => (
@@ -96,26 +106,28 @@ export type GenerateGetStaticPaths = fp.reader.Reader<
   GetStaticPaths
 >
 
-export const generateGetStaticPaths: GenerateGetStaticPaths = (
-  r: ApiEnvironment,
-): GetStaticPaths => async (): Promise<StaticPaths> => {
-  const allBreeds: AllBreeds = await getAllBreeds(r)()
+export const generateGetStaticPaths: GenerateGetStaticPaths =
+  (r: ApiEnvironment): GetStaticPaths =>
+  async (): Promise<StaticPaths> => {
+    const allBreeds: AllBreeds = await getAllBreeds(r)()
 
-  const paths: Paths<Query> = fp.pipeable.pipe(
-    allBreeds,
-    fp.either.map(
-      ({ message }: AllBreedsSuccess): Paths<Query> =>
-        fp.pipeable.pipe(
-          message,
-          fp.record.keys,
-          fp.array.map((breed: string): Path<Query> => ({ params: { breed } })),
-        ),
-    ),
-    fp.either.getOrElse(fp.function.constant<Paths<Query>>([])),
-  )
+    const paths: Paths<Query> = fp.function.pipe(
+      allBreeds,
+      fp.either.map(
+        ({ message }: AllBreedsSuccess): Paths<Query> =>
+          fp.function.pipe(
+            message,
+            fp.record.keys,
+            fp.array.map(
+              (breed: string): Path<Query> => ({ params: { breed } }),
+            ),
+          ),
+      ),
+      fp.either.getOrElse(fp.function.constant<Paths<Query>>([])),
+    )
 
-  return { fallback: false, paths }
-}
+    return { fallback: false, paths }
+  }
 
 export const getStaticPaths: GetStaticPaths = generateGetStaticPaths({
   fetch: unfetch,
@@ -129,9 +141,8 @@ export const QueryCodec: io.Type<Query> = io.type({
   breed: io.string,
 })
 
-export const ContextCodec: io.Type<DecodedContext> = GetStaticPropsDecodedContextCodec(
-  QueryCodec,
-)
+export const ContextCodec: io.Type<DecodedContext> =
+  GetStaticPropsDecodedContextCodec(QueryCodec)
 
 export type Context = fp.either.Either<Array<Error>, DecodedContext>
 
@@ -142,31 +153,31 @@ export type GetStaticProps = Next_GetStaticProps<Props, Query>
 export const generateGetStaticProps: fp.reader.Reader<
   ApiEnvironment,
   GetStaticProps
-> = (r: ApiEnvironment): GetStaticProps => async (
-  rawContext: RawContext,
-): Promise<StaticProps> => {
-  const context: Context = fp.pipeable.pipe(
-    ContextCodec.decode(rawContext),
-    fp.either.mapLeft(mapValidationErrorToError),
-    fp.either.map(
-      fp.record.filter(Boolean) as (rc: RawContext) => DecodedContext,
-    ),
-  )
+> =
+  (r: ApiEnvironment): GetStaticProps =>
+  async (rawContext: RawContext): Promise<StaticProps> => {
+    const context: Context = fp.function.pipe(
+      ContextCodec.decode(rawContext),
+      fp.either.mapLeft(mapValidationErrorToError),
+      fp.either.map(
+        fp.record.filter(Boolean) as (rc: RawContext) => DecodedContext,
+      ),
+    )
 
-  const getBreedImages: GetBreedImages = fp.pipeable.pipe(
-    fp.readerTaskEither.fromEither(context),
-    fp.readerTaskEither.chain(
-      ({ params: { breed } }: DecodedContext): GetBreedImages =>
-        generateGetBreedImages({ breed }),
-    ),
-  )
+    const getBreedImages: GetBreedImages = fp.function.pipe(
+      fp.readerTaskEither.fromEither(context),
+      fp.readerTaskEither.chain(
+        ({ params: { breed } }: DecodedContext): GetBreedImages =>
+          generateGetBreedImages({ breed }),
+      ),
+    )
 
-  const breedImages: BreedImages = await getBreedImages(r)()
+    const breedImages: BreedImages = await getBreedImages(r)()
 
-  const props: Props = { breedImages, context }
+    const props: Props = { breedImages, context }
 
-  return { props }
-}
+    return { props }
+  }
 
 export const getStaticProps: GetStaticProps = generateGetStaticProps({
   fetch: unfetch,

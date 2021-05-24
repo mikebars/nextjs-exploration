@@ -21,15 +21,13 @@ describe('generateGetSubBreedImages', (): void => {
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string(), subBreed: fc.string() }),
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnSuccess(
-              defaultSubBreedImagesSuccess,
-            )
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnSuccess(
+            defaultSubBreedImagesSuccess,
+          )
 
-            return response
-          },
-        ),
+          return response
+        }),
         async (
           params: GenerateGetSubBreedImagesParams,
           r: ApiEnvironment,
@@ -54,13 +52,11 @@ describe('generateGetSubBreedImages', (): void => {
     await fc.assert(
       fc.asyncProperty(
         fc.record({ breed: fc.string(), subBreed: fc.string() }),
-        environmentArbitrary(
-          async (): Promise<Response> => {
-            const response: Response = await fetchReturnFailure('failure')
+        environmentArbitrary(async (): Promise<Response> => {
+          const response: Response = await fetchReturnFailure('failure')
 
-            return response
-          },
-        ),
+          return response
+        }),
         async (
           params: GenerateGetSubBreedImagesParams,
           r: ApiEnvironment,

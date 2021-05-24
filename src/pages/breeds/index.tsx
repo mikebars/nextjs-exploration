@@ -27,18 +27,15 @@ export type SortedBreeds = fp.either.Either<Array<Error>, SortedBreedsSuccess>
 export type SortBreeds = (allBreeds: AllBreeds) => SortedBreeds
 
 export const sortBreeds: SortBreeds = (allBreeds: AllBreeds): SortedBreeds =>
-  fp.pipeable.pipe(
+  fp.function.pipe(
     allBreeds,
     fp.either.map(
       ({ message }: AllBreedsSuccess): SortedBreedsSuccess =>
-        fp.pipeable.pipe(
+        fp.function.pipe(
           message,
           fp.record.toArray,
           fp.array.sort(
-            fp.ord.getTupleOrd(
-              fp.ord.ordString,
-              fp.array.getOrd(fp.ord.ordString),
-            ),
+            fp.ord.tuple(fp.string.Ord, fp.array.getOrd(fp.string.Ord)),
           ),
         ),
     ),
@@ -57,7 +54,7 @@ export const Breeds: Next_NextPage<Props> = (props: Props): ReactElement => {
         <Header classNameProp="p-3">All Breeds</Header>
 
         <Container classNameProp="space-y-1">
-          {fp.pipeable.pipe(
+          {fp.function.pipe(
             sortedBreeds,
             fp.either.fold(
               (errors: Array<Error>): ReactElement => (
@@ -109,15 +106,15 @@ export type GenerateGetStaticProps = fp.reader.Reader<
   GetStaticProps
 >
 
-export const generateGetStaticProps: GenerateGetStaticProps = (
-  r: ApiEnvironment,
-): GetStaticProps => async (_rawContext: RawContext): Promise<StaticProps> => {
-  const allBreeds: AllBreeds = await getAllBreeds(r)()
+export const generateGetStaticProps: GenerateGetStaticProps =
+  (r: ApiEnvironment): GetStaticProps =>
+  async (_rawContext: RawContext): Promise<StaticProps> => {
+    const allBreeds: AllBreeds = await getAllBreeds(r)()
 
-  const props: Props = { allBreeds }
+    const props: Props = { allBreeds }
 
-  return { props }
-}
+    return { props }
+  }
 
 export const getStaticProps: GetStaticProps = generateGetStaticProps({
   fetch: unfetch,
