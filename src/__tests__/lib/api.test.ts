@@ -64,8 +64,10 @@ describe('generateApiCall', (): void => {
         fetchParamsArbitrary(),
         environmentArbitrary(fetchReturnSuccessAsync),
         async (input: FetchParameters, r: ApiEnvironment): Promise<boolean> => {
-          const response: fp.either.Either<Array<Error>, unknown> =
-            await generateApiCall(...input)(r)()
+          const response: fp.either.Either<
+            Array<Error>,
+            unknown
+          > = await generateApiCall(...input)(r)()
 
           const isValid: boolean = fp.either.isRight(response)
 
@@ -85,8 +87,10 @@ describe('generateApiCall', (): void => {
         fetchParamsArbitrary(),
         environmentArbitrary(fetchReturnFailureAsync),
         async (input: FetchParameters, r: ApiEnvironment): Promise<boolean> => {
-          const response: fp.either.Either<Array<Error>, unknown> =
-            await generateApiCall(...input)(r)()
+          const response: fp.either.Either<
+            Array<Error>,
+            unknown
+          > = await generateApiCall(...input)(r)()
 
           const isValid: boolean = fp.either.isLeft(response)
 
@@ -117,8 +121,10 @@ describe('decodeApiCall', (): void => {
             unknown
           >,
         ): Promise<boolean> => {
-          const response: fp.either.Either<Array<Error>, unknown> =
-            await decodeApiCall(d)(apiCall)(r)()
+          const response: fp.either.Either<
+            Array<Error>,
+            unknown
+          > = await decodeApiCall(d)(apiCall)(r)()
 
           const isValid: boolean = fp.either.isRight(response)
 
@@ -149,8 +155,10 @@ describe('decodeApiCall', (): void => {
             unknown
           >,
         ): Promise<boolean> => {
-          const response: fp.either.Either<Array<Error>, unknown> =
-            await decodeApiCall(d)(apiCall)(r)()
+          const response: fp.either.Either<
+            Array<Error>,
+            unknown
+          > = await decodeApiCall(d)(apiCall)(r)()
 
           const isInvalid: boolean = fp.either.isLeft(response)
 

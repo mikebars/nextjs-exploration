@@ -38,6 +38,7 @@ const jestTestProjectConfig = {
   },
   modulePaths: ['<rootDir>'],
   setupFilesAfterEnv: ['jest-extended'],
+  testEnvironment: 'jsdom',
   testMatch: [
     '**/__tests__/**/*.test.cjs',
     '**/__tests__/**/*.test.js',
