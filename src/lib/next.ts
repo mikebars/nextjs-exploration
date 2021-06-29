@@ -6,9 +6,7 @@ import type {
 /* eslint-disable-next-line unicorn/prefer-node-protocol */
 import type { ParsedUrlQuery as qs_ParsedUrlQuery } from 'querystring'
 
-export type PromiseType<P extends Promise<unknown>> = P extends Promise<infer A>
-  ? A
-  : P
+export type PromiseType<P> = P extends Promise<infer A> ? A : P
 
 export type GetStaticPathsResult<Query extends qs_ParsedUrlQuery> = PromiseType<
   ReturnType<Next_GetStaticPaths<Query>>
