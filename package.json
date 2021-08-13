@@ -218,7 +218,7 @@
     "lint-staged": "11.0.0",
     "monocle-ts": "2.3.10",
     "newtype-ts": "0.3.4",
-    "next": "11.0.1",
+    "next": "11.1.0",
     "patch-package": "6.4.7",
     "postcss": "8.3.5",
     "postcss-cli": "8.3.1",
